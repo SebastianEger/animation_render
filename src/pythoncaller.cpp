@@ -1,0 +1,115 @@
+#include "pythoncaller.h"
+
+PythonCaller::PythonCaller(ros::NodeHandle *nh) :
+    nH_(nh)
+{
+    pkg_path_ = ros::package::getPath("tplsearch_test");
+    python3_ = "python3.6 ";
+    python_ = "python ";
+}
+
+void PythonCaller::render_video(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, std::string mp1, std::string mp2, std::string mp3)
+{
+    std::string py_file = "render_video.py";
+    std::string opt_frames = " --frames " + std::to_string(frames);
+    std::string opt_fps = " --fps " + std::to_string(fps);
+    std::string opt_object = " --obj " + object;
+    std::string opt_animation = " --anim " + animation;
+    std::string opt_resolution = " --res " + std::to_string(res_x) + " " + std::to_string(res_y);
+    std::string opt_size = " --mp " +  mp1 + " " +  mp2 + " " +  mp3;
+
+    // DONT CHANGE
+    std::string tpl_img = " --tpl_img " + pkg_path_ + "/img/template_image.jpg";
+    std::string bgr_img = " --bgr_img " + pkg_path_ + "/img/background_image.jpg";
+    std::string output = " --out " + pkg_path_ + "/render/video.avi";
+
+    execute_script(py_file
+                   + opt_frames
+                   + opt_fps
+                   + opt_object
+                   + opt_animation
+                   + opt_resolution
+                   + opt_size
+                   + tpl_img
+                   + bgr_img
+                   + output);
+}
+
+void PythonCaller::get_template_image_list(int length, int min_height, int min_width, std::string keywords)
+{
+    std::string py_file = "generate_image_list.py";
+    std::string opt_length = " --length " + std::to_string(length);
+    std::string opt_min_size = " --size " + std::to_string(min_width) + " " + std::to_string(min_height);
+    std::string path = " --path " + pkg_path_ + "/img/template_image_list.txt";
+
+    execute_script(py_file + opt_length + opt_min_size + path + " --keywords " + keywords);
+}
+
+void PythonCaller::get_background_image_list(int length, int min_height, int min_width, std::string keywords)
+{
+    std::string py_file = "generate_image_list.py";
+
+    std::string opt_length = " --length " + std::to_string(length);
+    std::string opt_min_size = " --size " + std::to_string(min_width) + " " + std::to_string(min_height);
+    std::string path = " --path " + pkg_path_ + "/img/background_image_list.txt";
+
+    execute_script(py_file + opt_length + opt_min_size + path + " --keywords " + keywords);
+}
+
+void PythonCaller::download_template_image(int nr)
+{
+    std::string py_file = "download_image.py";
+
+    std::string path = " --path " + pkg_path_ + "/img/template_image.jpg";
+    std::string img_list = " --img_list " + pkg_path_ + "/img/template_image_list.txt";
+
+    execute_script(py_file + path + img_list + " --image_nr " + std::to_string(nr));
+}
+
+void PythonCaller::download_background_image(int nr)
+{
+    std::string py_file = "download_image.py";
+
+    std::string path = " --path " + pkg_path_ + "/img/background_image.jpg";
+    std::string img_list = " --img_list " + pkg_path_ + "/img/background_image_list.txt";
+
+    execute_script(py_file + path + img_list + " --image_nr " + std::to_string(nr));
+}
+
+void PythonCaller::get_ground_truth_data(std::string animation, int frames, std::string path)
+{
+     std::string py_file = "get_ground_truth.py";
+
+     std::string opt_path = " --path " + path;
+     std::string opt_anim = " --anim " + animation;
+     std::string opt_frames = " --frames " + std::to_string(frames);
+
+     execute_script(py_file + opt_path + opt_anim + opt_frames);
+}
+
+void PythonCaller::get_init_pose(std::string animation, double &x, double &y, double &z, double &ax, double &ay, double &az)
+{
+    std::string py_file = "get_init_pose.py";
+    std::string opt_anim = " --anim " + animation;
+
+    FILE* out = execute_script(py_file + opt_anim, 3);
+    fscanf(out, "%lf %lf %lf %lf %lf %lf", &x, &y, &z, &ax, &ay, &az);
+
+    delete[] out;
+}
+
+FILE *PythonCaller::execute_script(std::string script, int version)
+{
+    ROS_INFO_STREAM("Executing " << script);
+    std::string execute_string;
+    if(version == 2) execute_string = python_ + pkg_path_ + "/scripts/" + script;
+    if(version == 3) execute_string = python3_ + pkg_path_ + "/scripts/" + script;
+    return(popen( execute_string.c_str(), "r") );
+}
+
+void PythonCaller::execute_script(std::string script)
+{
+    ROS_INFO_STREAM("Executing " << script);
+    std::string execute_string = python3_ + pkg_path_ + "/scripts/" + script;
+    system(execute_string.c_str());
+}
