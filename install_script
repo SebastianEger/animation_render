@@ -1,1 +1,5 @@
+# Install pip, setuptools, wheel
+sudo python3 get-pip.py
+
+# Install dependencies
 sudo python3 ./scripts/setup.py install
