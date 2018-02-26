@@ -1,8 +1,1 @@
-## Install Python 3.6
-sudo add-apt-repository ppa:jonathonf/python-3.6
-sudo apt-get update
-sudo apt-get install python3.6
-
-# Setup Python 3.6
-wget https://bootstrap.pypa.io/ez_setup.py -O - | sudo python3.6
-sudo python3.6 ./scripts/setup.py install
+sudo python3 ./scripts/setup.py install
