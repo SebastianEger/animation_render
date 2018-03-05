@@ -1,11 +1,3 @@
-import os, sys
-
-pathname = os.path.realpath(__file__)
-pathname = pathname[:-28] + "lib/"
-sys.path.append(pathname)
-
-print(pathname)
-
 import bpy
 import flickrapi
 from PIL import Image

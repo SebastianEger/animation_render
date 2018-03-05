@@ -1,6 +1,5 @@
 import argparse
 from framework.handler import BlenderHandler
-
 import importlib
 
 parser = argparse.ArgumentParser(description="Process parameters.")
