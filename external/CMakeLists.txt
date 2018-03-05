@@ -10,6 +10,6 @@ ExternalProject_Add(blender
   PREFIX ${CMAKE_CURRENT_BINARY_DIR}/blender-prefix
   BUILD_IN_SOURCE 0
   CONFIGURE_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/blender-prefix/src/blender/build_files/build_environment/install_deps.sh
-  BUILD_COMMAND make -C ${CMAKE_CURRENT_BINARY_DIR}/blender-prefix/src/blender
+  BUILD_COMMAND make -C ${CMAKE_CURRENT_BINARY_DIR}/blender-prefix/src/blender BUILD_CMAKE_ARGS="-U *OPENCOLORIO* -U *OPENIMAGEIO* -D WITH_OPENCOLORIO=ON -D OPENCOLORIO_ROOT_DIR=/opt/lib/ocio -D WITH_OPENIMAGEIO=ON -D OPENIMAGEIO_ROOT_DIR=/opt/lib/oiio"
   INSTALL_COMMAND ""
 )
