@@ -1,0 +1,9 @@
+@@ -280,7 +280,7 @@
+ SUDO="sudo"
+
+ NO_BUILD=false
+-NO_CONFIRM=false
++NO_CONFIRM=true
+
+ PYTHON_VERSION="3.5.1"
+ PYTHON_VERSION_MIN="3.5"
