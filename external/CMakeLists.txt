@@ -8,7 +8,7 @@ ExternalProject_Add(blender
   PATCH_COMMAND patch ${CMAKE_CURRENT_BINARY_DIR}/blender-prefix/src/blender/CMakeLists.txt ${CMAKE_CURRENT_SOURCE_DIR}/blender-cmake.patch
   PREFIX ${CMAKE_CURRENT_BINARY_DIR}/blender-prefix
   BUILD_IN_SOURCE 0
-  CONFIGURE_COMMAND ""
+  CONFIGURE_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/blender-prefix/src/blender/build_files/build_environment/install_deps.sh
   BUILD_COMMAND make -C ${CMAKE_CURRENT_BINARY_DIR}/blender-prefix/src/blender
   INSTALL_COMMAND ""
 )
