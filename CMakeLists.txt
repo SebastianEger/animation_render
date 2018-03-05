@@ -11,6 +11,7 @@ catkin_package(
     CATKIN_DEPENDS roscpp rospy std_msgs image_transport camera_info_manager cv_bridge
 )
 
+add_subdirectory(external)
 include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} /usr/include/libxml2)
 
 add_executable(${PROJECT_NAME}_node src/tpltester.cpp src/pythoncaller.cpp src/videostream.cpp)
