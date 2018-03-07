@@ -1,13 +1,6 @@
 import argparse, pickle, io
 
 from urllib import request
-
-import os, sys
-
-pathname = os.path.realpath(__file__)
-pathname = pathname[:-17] + "modules/"
-sys.path.append(pathname)
-
 from PIL import Image
 
 parser = argparse.ArgumentParser(description="Process parameters.")
