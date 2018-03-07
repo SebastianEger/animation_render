@@ -20,9 +20,9 @@
         <param name="fps" value="1"/>
         <param name="frames" value="30"/>
 
-        <param name="skip_image_download" value="true"/>
+        <param name="skip_image_download" value="false"/>
         <param name="skip_ground_truth" value="true"/>
         <param name="skip_render" value="false"/>
-        <param name="skip_img_list" value="true"/>
+        <param name="skip_img_list" value="false"/>
     </node>
 </launch>
