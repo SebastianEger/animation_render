@@ -8,7 +8,7 @@ PythonCaller::PythonCaller(ros::NodeHandle *nh) :
     python_ = "python ";
 }
 
-void PythonCaller::render_video(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, std::string mp1, std::string mp2, std::string mp3)
+void PythonCaller::render_video(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3)
 {
     std::string py_file = "render_video.py";
     std::string opt_frames = " --frames " + std::to_string(frames);
@@ -16,12 +16,13 @@ void PythonCaller::render_video(int frames, int fps, std::string object, std::st
     std::string opt_object = " --obj " + object;
     std::string opt_animation = " --anim " + animation;
     std::string opt_resolution = " --res " + std::to_string(res_x) + " " + std::to_string(res_y);
-    std::string opt_size = " --mp " +  mp1 + " " +  mp2 + " " +  mp3;
+    std::string opt_size = " --mp " +  std::to_string(mp1) + " " +  std::to_string(mp2) + " " +  std::to_string(mp3);
 
     // DONT CHANGE
     std::string tpl_img = " --tpl_img " + pkg_path_ + "/img/template_image.jpg";
     std::string bgr_img = " --bgr_img " + pkg_path_ + "/img/background_image.jpg";
-    std::string output = " --out " + pkg_path_ + "/render/video.avi";
+    std::string output  = " --out "
+            + pkg_path_ + "/render/video.avi";
 
     execute_script(py_file
                    + opt_frames

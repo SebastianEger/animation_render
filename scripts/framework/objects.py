@@ -163,8 +163,8 @@ class Plane(BlenderObject):
     height = None
 
     def __init__(self, p1, p2, p3, image=None):
-        self.width = p1
-        self.height = p2
+        self.width  = float(p1)
+        self.height = float(p2)
 
         BlenderObject.__init__(self, "Plane", image)
 

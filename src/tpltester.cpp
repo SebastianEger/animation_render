@@ -17,16 +17,16 @@ int main( int argc, char** argv )
 }
 
 TplTester::TplTester(ros::NodeHandle *nH) :
-    nH_(nH)
+    mpNodeHandle(nH)
 {
-    _nH_ = ros::NodeHandle();
-    pyCaller = new PythonCaller(&_nH_);
-    vstream = new VideoStream(_nH_);
+    mGlobalNodeHandle = ros::NodeHandle();
+    pyCaller = new PythonCaller(&mGlobalNodeHandle);
+    vstream = new VideoStream(mGlobalNodeHandle);
     vstream->fps = 25;
 
-    pubTrackerControl_ = _nH_.advertise<std_msgs::String>("/tplsearch/control", 1);
-    pubRenderControl_ = _nH_.advertise<std_msgs::String>("/render/control", 1000);
-    subControl_ = _nH_.subscribe<std_msgs::String>("/tplsearch_test/control", 1, &TplTester::controlCallback, this);
+    pubTrackerControl_ = mGlobalNodeHandle.advertise<std_msgs::String>("/tplsearch/control", 1);
+    pubRenderControl_ = mGlobalNodeHandle.advertise<std_msgs::String>("/render/control", 1000);
+    subControl_ = mGlobalNodeHandle.subscribe<std_msgs::String>("/tplsearch_test/control", 1, &TplTester::controlCallback, this);
 
     currentTemplateImgID_ = 0;
     currentBackgroundImgID_ = 0;
@@ -35,7 +35,7 @@ TplTester::TplTester(ros::NodeHandle *nH) :
 
     if(!skipGroundTruth_) {
         std::string dataPath;
-        _nH_.param<std::string>("/tplsearch/data_path", dataPath, "~/tplsearch_data");
+        mGlobalNodeHandle.param<std::string>("/tplsearch/data_path", dataPath, "~/tplsearch_data");
         pyCaller->get_ground_truth_data(animation_, frames_, dataPath + "/ground_truth");
     }
 
@@ -104,42 +104,46 @@ void TplTester::controlCallback(const std_msgs::String::ConstPtr &msg)
             ros::shutdown();
             return;
         }
-        setTemplateSearchParameters();
+        pyCaller->download_template_image(currentTemplateImgID_);
+        pyCaller->download_background_image(currentBackgroundImgID_);
+
         trackerControlPublish("Init");
     }
 }
 
 void TplTester::getTestParameters()
 {
-    nH_->param<bool>("autostart", autostart_, false);
-    nH_->param<int>("list_length", listLength_, 100);
+    mpNodeHandle->param<bool>("autostart", autostart_, false);
+    mpNodeHandle->param<int>("list_length", listLength_, 100);
 
     //
-    nH_->param<bool>("skip_render",         skipRender_,        false);
-    nH_->param<bool>("skip_img_list",       skipImgList_,       false);
-    nH_->param<bool>("skip_ground_truth",   skipGroundTruth_,   false);
-    nH_->param<bool>("skip_image_download", skipImageDownload_, false);
+    mpNodeHandle->param<bool>("skip_render",         skipRender_,        false);
+    mpNodeHandle->param<bool>("skip_img_list",       skipImgList_,       false);
+    mpNodeHandle->param<bool>("skip_ground_truth",   skipGroundTruth_,   false);
+    mpNodeHandle->param<bool>("skip_image_download", skipImageDownload_, false);
 
     // Video parameters
-    nH_->param<int>("frames",              frames_, 100);
-    nH_->param<int>("fps",                 fps_,    25);
-    nH_->param<int>("render_image_width",  res_x_,  600);
-    nH_->param<int>("render_image_height", res_y_,  600);
+    mpNodeHandle->param<int>("frames",              frames_, 100);
+    mpNodeHandle->param<int>("fps",                 fps_,    25);
+    mpNodeHandle->param<int>("render_image_width",  res_x_,  600);
+    mpNodeHandle->param<int>("render_image_height", res_y_,  600);
 
-    nH_->param<std::string>("animation",           animation_,           "Rotation");
-    nH_->param<std::string>("object",              object_,              "Cylinder");
-    nH_->param<std::string>("template_keywords",   template_keywords_,   "bird");
-    nH_->param<std::string>("background_keywords", background_keywords_, "plane");
+    mpNodeHandle->param<std::string>("animation",           animation_,           "Rotation");
+    mpNodeHandle->param<std::string>("object",              object_,              "Cylinder");
+    mpNodeHandle->param<std::string>("template_keywords",   template_keywords_,   "bird");
+    mpNodeHandle->param<std::string>("background_keywords", background_keywords_, "plane");
 
     // Model parameters
-    nH_->param<std::string>("model_parameter_1", mp1, "0.05");
-    nH_->param<std::string>("model_parameter_2", mp2, "0.01");
-    nH_->param<std::string>("model_parameter_3", mp3, "200");
+    mpNodeHandle->param<double>("model_parameter_1", mp1, 0.05);
+    mpNodeHandle->param<double>("model_parameter_2", mp2, 0.01);
+    mpNodeHandle->param<double>("model_parameter_3", mp3, 200);
 
-    nH_->param<int>("template_min_height",   template_min_height_,   500);
-    nH_->param<int>("template_min_width",    template_min_width_,    500);
-    nH_->param<int>("background_min_height", background_min_height_, 500);
-    nH_->param<int>("background_min_width",  background_min_width_,  500);
+    std::cout << mp1 << mp2 << mp3 << std::endl;
+
+    mpNodeHandle->param<int>("template_min_height",   template_min_height_,   500);
+    mpNodeHandle->param<int>("template_min_width",    template_min_width_,    500);
+    mpNodeHandle->param<int>("background_min_height", background_min_height_, 500);
+    mpNodeHandle->param<int>("background_min_width",  background_min_width_,  500);
 }
 
 void TplTester::getTplsearchParameters()
@@ -162,7 +166,7 @@ void TplTester::setTemplateSearchParameters()
     }
 
     // set new parameters
-    _nH_.setParam("/tplsearch/templates", templates);
+    mGlobalNodeHandle.setParam("/tplsearch/templates", templates);
 }
 
 void TplTester::renderControlPublish(std::string msg)

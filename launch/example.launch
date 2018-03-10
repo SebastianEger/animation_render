@@ -3,22 +3,22 @@
         <param name="autostart" value="0"/>
         <param name="runs" value="3"/>
 
-        <param name="object" value="Cylinder"/>
-        <param name="model_parameter_1" value="0.05"/>
-        <param name="model_parameter_2" value="0.01"/>
-        <param name="model_parameter_3" value="200"/>
+        <param name="object" value="Plane"/>
+        <param name="model_parameter_1" value="Hundert"/>
+        <param name="model_parameter_2" value="0.05"/>
+        <param name="model_parameter_3" value="1"/>
 
-        <param name="animation" value="TestAdvanceFaceTracker"/>
+        <param name="animation" value="RotationPlaneZ"/>
         <!--  RotationPlaneZ RotationCylinder2 TranslationCylinder1 TranslationPlane1 -->
 
-        <param name="list_length" value="10"/>
-        <param name="template_keywords" value="santa christmas"/>
-        <param name="background_keywords" value="city landscape forest"/>
+        <param name="list_length" value="5"/>
+        <param name="template_keywords" value="car ship"/>
+        <param name="background_keywords" value="city"/>
         <param name="render_image_width" value="500"/>
         <param name="render_image_height" value="500"/>
 
-        <param name="fps" value="1"/>
-        <param name="frames" value="30"/>
+        <param name="fps" value="10"/>
+        <param name="frames" value="150"/>
 
         <param name="skip_image_download" value="false"/>
         <param name="skip_ground_truth" value="true"/>
