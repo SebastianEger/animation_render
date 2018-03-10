@@ -11,7 +11,7 @@ class PythonCaller
 public:
     PythonCaller(ros::NodeHandle *nh);
 
-    void render_video(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, std::string mp1, std::string mp2, std::string mp3);
+    void render_video(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3);
 
     void get_template_image_list(int length, int min_height, int min_width, std::string keywords);
     void get_background_image_list(int length, int min_height, int min_width, std::string keywords);

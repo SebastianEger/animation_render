@@ -21,8 +21,8 @@ public:
     bool autostart_;
 
 private:
-    ros::NodeHandle *nH_;
-    ros::NodeHandle _nH_;
+    ros::NodeHandle *mpNodeHandle;
+    ros::NodeHandle mGlobalNodeHandle;
     ros::Publisher pubTrackerControl_, pubRenderControl_;
     ros::Subscriber subControl_;
 
@@ -73,7 +73,7 @@ private:
     std::string secret_key_;
 
     // Model parameters
-    std::string mp1, mp2, mp3;
+    double mp1, mp2, mp3;
 
     void setTemplateSearchParameters();
     void renderControlPublish(std::string msg);
