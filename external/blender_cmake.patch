@@ -1,28 +1,21 @@
---- CMakeLists.txt	2018-03-12 10:30:10.797850445 +0100
-+++ CMakeListsPatched.txt	2018-03-10 14:41:53.842678029 +0100
-@@ -171,16 +171,16 @@
+--- CMakeLists.txt	2018-03-12 14:58:51.071628638 +0100
++++ CMakeListsPatched.txt	2018-03-12 14:58:21.759757051 +0100
+@@ -171,13 +171,13 @@
  if(UNIX AND NOT APPLE)
  	# some of these libraries are problematic on Linux
  	# disable less important dependencies by default
 -	set(_init_CODEC_FFMPEG                   OFF)
--	set(_init_CYCLES_OSL                     OFF)
--	set(_init_CYCLES_OPENSUBDIV              OFF)
--	set(_init_IMAGE_OPENEXR                  OFF)
 +	set(_init_CODEC_FFMPEG                   ON)
-+	set(_init_CYCLES_OSL                     ON)
-+	set(_init_CYCLES_OPENSUBDIV              ON)
-+	set(_init_IMAGE_OPENEXR                  ON)
+ 	set(_init_CYCLES_OSL                     OFF)
+ 	set(_init_CYCLES_OPENSUBDIV              OFF)
+ 	set(_init_IMAGE_OPENEXR                  OFF)
  	set(_init_JACK                           OFF)
  	set(_init_OPENCOLLADA                    OFF)
 -	set(_init_OPENCOLORIO                    OFF)
 +	set(_init_OPENCOLORIO                    ON)
  	set(_init_SDL                            OFF)
  	set(_init_FFTW3                          OFF)
--	set(_init_OPENSUBDIV                     OFF)
-+	set(_init_OPENSUBDIV                     ON)
- elseif(WIN32)
- 	set(_init_JACK                           OFF)
- elseif(APPLE)
+ 	set(_init_OPENSUBDIV                     OFF)
 @@ -204,13 +204,13 @@
  option(WITH_INTERNATIONAL "Enable I18N (International fonts and text)" ON)
  
