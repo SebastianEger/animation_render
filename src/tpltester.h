@@ -58,7 +58,8 @@ private:
     int background_min_width_;
     int background_min_height_;
 
-    XmlRpc::XmlRpcValue templates;
+    XmlRpc::XmlRpcValue mTemplateParameters;
+    XmlRpc::XmlRpcValue mModelParameters;
 
     bool skipRender_;
     bool skipImgList_;

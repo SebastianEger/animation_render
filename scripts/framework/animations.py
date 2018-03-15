@@ -149,7 +149,7 @@ class TranslationCylinder1(Animation):
 
     def _add_keyframes(self, scene, blender_object, frames):
         blender_object.set_location((-0.03, -0.03, -0.15))
-        blender_object.set_rotation((0, -math.pi/2, 0))
+        blender_object.set_rotation((0, 0, 0))
 
         blender_object.keyframe_insert("location", 1)
         blender_object.keyframe_insert("location", int(frames/5))
@@ -174,7 +174,7 @@ class TranslationCylinder1(Animation):
 
     @staticmethod
     def get_start_rotation():
-        return 0, -math.pi/2, 0
+        return 0, 0, 0
 
 
 class TestAdvanceFaceTracker(Animation):

@@ -4,11 +4,11 @@
         <param name="runs" value="3"/>
 
         <param name="object" value="Plane"/>
-        <param name="model_parameter_1" value="Hundert"/>
-        <param name="model_parameter_2" value="0.05"/>
-        <param name="model_parameter_3" value="1"/>
+        <param name="model_parameter_1" value="0.04"/>
+        <param name="model_parameter_2" value="0.04"/>
+        <param name="model_parameter_3" value="200"/>
 
-        <param name="animation" value="RotationPlaneZ"/>
+        <param name="animation" value="TestAdvanceFaceTracker"/>
         <!--  RotationPlaneZ RotationCylinder2 TranslationCylinder1 TranslationPlane1 -->
 
         <param name="list_length" value="5"/>
@@ -20,9 +20,9 @@
         <param name="fps" value="10"/>
         <param name="frames" value="150"/>
 
-        <param name="skip_image_download" value="false"/>
+        <param name="skip_image_download" value="true"/>
         <param name="skip_ground_truth" value="true"/>
-        <param name="skip_render" value="false"/>
-        <param name="skip_img_list" value="false"/>
+        <param name="skip_render" value="true"/>
+        <param name="skip_img_list" value="true"/>
     </node>
 </launch>

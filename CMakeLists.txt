@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(tplsearch_test)
 
 add_compile_options(-std=c++11)
+option(BUILD_BLENDER_MODULE "Build the blender module" OFF)
 
 find_package(catkin REQUIRED roscpp rospy std_msgs image_transport camera_info_manager cv_bridge)
 find_package(OpenCV REQUIRED)
@@ -11,7 +12,10 @@ catkin_package(
     CATKIN_DEPENDS roscpp rospy std_msgs image_transport camera_info_manager cv_bridge
 )
 
-add_subdirectory(external)
+if(BUILD_BLENDER_MODULE)
+  add_subdirectory(external)
+endif(BUILD_BLENDER_MODULE)
+
 include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} /usr/include/libxml2)
 
 add_executable(${PROJECT_NAME}_node src/tpltester.cpp src/pythoncaller.cpp src/videostream.cpp)

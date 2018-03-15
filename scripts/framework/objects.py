@@ -82,7 +82,7 @@ class Cylinder(BlenderObject):
 
         self.length = float(p1)
         self.radius = float(p2)
-        self.nFaces = int(p3)
+        self.nFaces = int(float(p3))
 
         BlenderObject.__init__(self, "Cylinder", image)
         self.obj.rotation_mode = 'YZX'
