@@ -1,6 +1,6 @@
 set(CMAKE_PREFIX_PATH /opt/ros/kinetic)
 cmake_minimum_required(VERSION 2.8.3)
-project(tplsearch_test)
+project(animation_render)
 
 add_compile_options(-std=c++11)
 option(BUILD_BLENDER_MODULE "Build the blender module" OFF)
