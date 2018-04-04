@@ -150,6 +150,9 @@ void TplTester::getTestParameters()
     mpNodeHandle->param<int>("template_min_width",    template_min_width_,    500);
     mpNodeHandle->param<int>("background_min_height", background_min_height_, 500);
     mpNodeHandle->param<int>("background_min_width",  background_min_width_,  500);
+
+    // Template parameters
+    mpNodeHandle->param<int>("template_resize",  resize_,  100);
 }
 
 void TplTester::getTplsearchParameters()
@@ -163,11 +166,11 @@ void TplTester::setTemplateSearchParameters()
 
     for(int i = 0; i < mTemplateParameters.size(); i++) {
         mTemplateParameters[i]["filename"] = ros::package::getPath("tplsearch_test") + "/img/template_image.jpg";
-        mTemplateParameters[i]["resize"]   = 200;
+        mTemplateParameters[i]["resize"]   = resize_;
     }
 
     for(int i = 0; i < mModelParameters.size(); i++) {
-        mModelParameters[i]["model_name"] = "Point" + object_;
+        mModelParameters[i]["model_name"] = object_;
         mModelParameters[i]["x"]      = x_;
         mModelParameters[i]["y"]      = y_;
         mModelParameters[i]["z"]      = z_;
@@ -176,8 +179,8 @@ void TplTester::setTemplateSearchParameters()
         mModelParameters[i]["az"]     = az_;
         mModelParameters[i]["length"] = mp1;
         mModelParameters[i]["radius"] = mp2;
-        mModelParameters[i]["width"]  = mp1;
-        mModelParameters[i]["height"] = mp2;
+        mModelParameters[i]["height"] = mp1;
+        mModelParameters[i]["width"]  = mp2;
     }
     // set new parameters
     mGlobalNodeHandle.setParam("/tplsearch/templates", mTemplateParameters);

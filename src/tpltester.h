@@ -76,6 +76,8 @@ private:
     // Model parameters
     double mp1, mp2, mp3;
 
+    int resize_;
+
     void setTemplateSearchParameters();
     void renderControlPublish(std::string msg);
     void trackerControlPublish(std::string msg);

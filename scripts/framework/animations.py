@@ -22,74 +22,101 @@ class Animation:
         return (0, 0, 0)
 
 
-class RotationPlaneZ(Animation):
+class Example(Animation):
 
     def __init__(self, bdr_handler, blender_object, frames):
         Animation.__init__(self, bdr_handler, blender_object, frames)
 
     def _add_keyframes(self, scene, blender_object, frames):
-        blender_object.set_location((0, 0, -0.10))
-        blender_object.keyframe_insert("rotation_euler", 1)
-        # init time
-        blender_object.keyframe_insert("rotation_euler", int(frames/5))
+        # Init location and rotation
+        blender_object.set_location((0, 0, 0))
+        blender_object.set_rotation((0, 0, 0))
 
-        blender_object.set_rotation((0, 0, 2*math.pi))
-
-        blender_object.keyframe_insert("rotation_euler", int(frames))
-
-    @staticmethod
-    def get_start_position():
-        return (0, 0, -0.10)
-
-
-class RotationX(Animation):
-
-    def __init__(self, bdr_handler, blender_object, frames):
-        Animation.__init__(self, bdr_handler, blender_object, frames)
-
-    def _add_keyframes(self, scene, blender_object, frames):
-        blender_object.set_location((0, 0, -0.10))
-        blender_object.keyframe_insert("rotation_euler", 1)
-        # init time
-        blender_object.keyframe_insert("rotation_euler", int(frames/5))
-
-        blender_object.set_rotation((2*math.pi, 0, 0))
-
-        blender_object.keyframe_insert("rotation_euler", int(frames))
-
-    @staticmethod
-    def get_start_position():
-        return (0, 0, -0.10)
-
-
-class TranslationPlane1(Animation):
-
-    def __init__(self, bdr_handler, blender_object, frames):
-        Animation.__init__(self, bdr_handler, blender_object, frames)
-
-    def _add_keyframes(self, scene, blender_object, frames):
-        blender_object.set_location((-0.03, -0.03, -0.15))
-
+        # Initial Time
         blender_object.keyframe_insert("location", 1)
         blender_object.keyframe_insert("location", int(frames/5))
 
-        blender_object.keyframe_insert("location", int(frames/4))
 
-        blender_object.set_location((0.03, -0.03, -0.15))
+    @staticmethod
+    def get_start_position():
+        return 0, 0, 0
+
+    @staticmethod
+    def get_start_rotation():
+        return 0, 0, 0
+
+
+class RotationZ(Animation):
+
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_location((0, 0, -0.15))
+        blender_object.keyframe_insert("rotation_euler", 1)
+        # init time
+        blender_object.keyframe_insert("rotation_euler", int(frames/10))
+
+        blender_object.set_rotation((0, 0, math.pi))
+
+        blender_object.keyframe_insert("rotation_euler", int(frames))
+
+    @staticmethod
+    def get_start_position():
+        return 0, 0, -0.15
+
+    @staticmethod
+    def get_start_rotation():
+        return 0, 0, 0
+
+
+class RotationXZ(Animation):
+
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_location((0, 0, -0.15))
+        blender_object.keyframe_insert("rotation_euler", 1)
+        # init time
+        blender_object.keyframe_insert("rotation_euler", int(frames/10))
+
+        blender_object.set_rotation((math.pi/2, 0, math.pi))
+
+        blender_object.keyframe_insert("rotation_euler", int(frames))
+
+    @staticmethod
+    def get_start_position():
+        return 0, 0, -0.15
+
+    @staticmethod
+    def get_start_rotation():
+        return 0, 0, 0
+
+
+class TranslationZ(Animation):
+
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_location((0, 0, -0.15))
+
+        blender_object.keyframe_insert("location", 1)
+        # Init time
+        blender_object.keyframe_insert("location", int(frames/10))
+
+        blender_object.set_location((0, 0, -0.10))
 
         blender_object.keyframe_insert("location", int(frames/2))
 
-        blender_object.set_location((0.03, 0.03, -0.15))
-
-        blender_object.keyframe_insert("location", int(frames*3/4))
-
-        blender_object.set_location((-0.03, 0.03, -0.15))
+        blender_object.set_location((0, 0, -0.30))
 
         blender_object.keyframe_insert("location", int(frames))
 
     @staticmethod
     def get_start_position():
-        return (-0.03, -0.03, -0.15)
+        return 0, 0, -0.15
 
 
 
@@ -196,6 +223,31 @@ class TestAdvanceFaceTracker(Animation):
     @staticmethod
     def get_start_position():
         return 0.0, 0.0, -0.15
+
+    @staticmethod
+    def get_start_rotation():
+        return 0, 0, 0
+
+
+class TestInverseCompositional(Animation):
+
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_location((0, 0, -0.10))
+        blender_object.set_rotation((0.0, 0, 0))
+
+        blender_object.keyframe_insert("location", 1)
+        blender_object.keyframe_insert("rotation_euler", 1)
+
+        blender_object.set_rotation((0 , 0, 0.5))
+        blender_object.keyframe_insert("location", int(frames))
+        blender_object.keyframe_insert("rotation_euler", int(frames))
+
+    @staticmethod
+    def get_start_position():
+        return 0.0, 0.0, -0.10
 
     @staticmethod
     def get_start_rotation():
