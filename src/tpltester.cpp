@@ -3,13 +3,12 @@
 
 int main( int argc, char** argv )
 {
-    ros::init(argc, argv, "tpltester");
+    ros::init(argc, argv, "animation_render");
     ros::NodeHandle nH("~");
 
     TplTester tester(&nH);
     if(tester.autostart_) tester.start();
 
-    printf("tplsearch: Entering ros::spin()\n");
     ros::spin();
 
     return 0;
@@ -21,14 +20,16 @@ TplTester::TplTester(ros::NodeHandle *nH) :
 {
     mGlobalNodeHandle = ros::NodeHandle();
     pyCaller = new PythonCaller(&mGlobalNodeHandle);
-    vstream = new VideoStream(mGlobalNodeHandle);
+    vstream =  new VideoStream(mGlobalNodeHandle);
     vstream->fps = 25;
 
-    pubTrackerControl_ = mGlobalNodeHandle.advertise<std_msgs::String>("/tplsearch/control", 1);
-    pubRenderControl_ = mGlobalNodeHandle.advertise<std_msgs::String>("/render/control", 1000);
-    subControl_ = mGlobalNodeHandle.subscribe<std_msgs::String>("/tplsearch_test/control", 1, &TplTester::controlCallback, this);
+    std::string controlTopic;
+    mpNodeHandle->param<std::string>("control_topic", controlTopic, "/tplsearch/control");
 
-    currentTemplateImgID_ = 0;
+    pubTrackerControl_ = mGlobalNodeHandle.advertise<std_msgs::String>(controlTopic, 1);
+    subControl_        = mGlobalNodeHandle.subscribe<std_msgs::String>("/animation_render/control", 1, &TplTester::controlCallback, this);
+
+    currentTemplateImgID_   = 0;
     currentBackgroundImgID_ = 0;
 
     getTestParameters();
@@ -59,7 +60,7 @@ void TplTester::start()
 
 void TplTester::controlCallback(const std_msgs::String::ConstPtr &msg)
 {
-    // TPLSEARCH_TEST COMMANDS
+    // animation_render COMMANDS
     if(msg->data == "StartTest") {
         start();
     }
@@ -82,7 +83,7 @@ void TplTester::controlCallback(const std_msgs::String::ConstPtr &msg)
     }
     if(msg->data == "RunVideo") {
         vstream->fps = fps_;
-        vstream->openStream(ros::package::getPath("tplsearch_test") + "/render/video.avi");
+        vstream->openStream(ros::package::getPath("animation_render") + "/render/video.avi");
         trackerControlPublish("ExportData");
     }
     if(msg->data == "SetParameters") {
@@ -93,7 +94,7 @@ void TplTester::controlCallback(const std_msgs::String::ConstPtr &msg)
     if(msg->data == "InitOK") {
         if(!skipRender_) pyCaller->render_video(frames_, fps_, object_, animation_, res_x_, res_y_, mp1, mp2, mp3);
         vstream->fps = fps_;
-        vstream->openStream(ros::package::getPath("tplsearch_test") + "/render/video.avi");
+        vstream->openStream(ros::package::getPath("animation_render") + "/render/video.avi");
         trackerControlPublish("ExportData");
     }
     if(msg->data == "ExportDataOK") {
@@ -144,8 +145,6 @@ void TplTester::getTestParameters()
     mpNodeHandle->param<double>("model_parameter_2", mp2, 0.01);
     mpNodeHandle->param<double>("model_parameter_3", mp3, 200);
 
-    std::cout << mp1 << mp2 << mp3 << std::endl;
-
     mpNodeHandle->param<int>("template_min_height",   template_min_height_,   500);
     mpNodeHandle->param<int>("template_min_width",    template_min_width_,    500);
     mpNodeHandle->param<int>("background_min_height", background_min_height_, 500);
@@ -165,7 +164,7 @@ void TplTester::setTemplateSearchParameters()
     ROS_INFO("Setting template parameters.");
 
     for(int i = 0; i < mTemplateParameters.size(); i++) {
-        mTemplateParameters[i]["filename"] = ros::package::getPath("tplsearch_test") + "/img/template_image.jpg";
+        mTemplateParameters[i]["filename"] = ros::package::getPath("animation_render") + "/img/template_image.jpg";
         mTemplateParameters[i]["resize"]   = resize_;
     }
 
@@ -185,13 +184,6 @@ void TplTester::setTemplateSearchParameters()
     // set new parameters
     mGlobalNodeHandle.setParam("/tplsearch/templates", mTemplateParameters);
     mGlobalNodeHandle.setParam("/tplsearch/models",    mModelParameters);
-}
-
-void TplTester::renderControlPublish(std::string msg)
-{
-    std_msgs::String toSend;
-    toSend.data = msg;
-    pubRenderControl_.publish(toSend);
 }
 
 void TplTester::trackerControlPublish(std::string msg)

@@ -23,7 +23,7 @@ public:
 private:
     ros::NodeHandle *mpNodeHandle;
     ros::NodeHandle mGlobalNodeHandle;
-    ros::Publisher pubTrackerControl_, pubRenderControl_;
+    ros::Publisher  pubTrackerControl_;
     ros::Subscriber subControl_;
 
     PythonCaller *pyCaller;

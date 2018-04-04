@@ -1,5 +1,7 @@
 <launch>
-    <node name="tplsearch_test" pkg="tplsearch_test" type="tplsearch_test_node" output="screen">
+    <node name="animation_render" pkg="animation_render" type="animation_render_node" output="screen">
+        <param name="control_topic" value="/tplsearch/control"/>
+
         <param name="autostart" value="0"/>
         <param name="runs" value="3"/>
 
