@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(animation_render)
 
 add_compile_options(-std=c++11)
-option(BUILD_BLENDER_MODULE "Build the blender module" OFF)
+option(BUILD_BLENDER_MODULE "Build the blender python module" OFF)
 
 find_package(catkin REQUIRED roscpp rospy std_msgs image_transport camera_info_manager cv_bridge)
 find_package(OpenCV REQUIRED)

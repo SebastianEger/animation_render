@@ -3,7 +3,7 @@
 PythonCaller::PythonCaller(ros::NodeHandle *nh) :
     nH_(nh)
 {
-    pkg_path_ = ros::package::getPath("tplsearch_test");
+    pkg_path_ = ros::package::getPath("animation_render");
     python3_ = "python3 ";
     python_ = "python ";
 }

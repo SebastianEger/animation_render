@@ -4,7 +4,7 @@ VideoStream::VideoStream(ros::NodeHandle rosH) :
     rosNodeHandle_(rosH)
 {
     cap = new cv::VideoCapture();
-    it = new image_transport::ImageTransport(rosH);
+    it  = new image_transport::ImageTransport(rosH);
 
     pub = it->advertiseCamera("/camera", 1);
 
