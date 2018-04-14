@@ -45,9 +45,11 @@ class BlenderObject:
         self.obj.keyframe_insert(data_path=keyframe_type, frame=frame)
 
     def _create_obj(self):
+        """ Function to create object """
         raise NotImplementedError
 
     def _uv(self):
+        """ Function to do uv mapping """
         raise NotImplementedError
 
     def _stripe_material(self):
@@ -139,10 +141,6 @@ class Cylinder(BlenderObject):
         for fi in range(self.nFaces):
             x0 = fi  / self.nFaces
             x1 = (fi + 1) / self.nFaces
-            # bm.faces[fi].loops[0][uv_layer].uv = (x0, 0)
-            # bm.faces[fi].loops[1][uv_layer].uv = (x1, 0)
-            # bm.faces[fi].loops[2][uv_layer].uv = (x1, 1)
-            # bm.faces[fi].loops[3][uv_layer].uv = (x0, 1)
             bm.faces[fi].loops[0][uv_layer].uv = (0, x0)
             bm.faces[fi].loops[1][uv_layer].uv = (0, x1)
             bm.faces[fi].loops[2][uv_layer].uv = (1, x1)

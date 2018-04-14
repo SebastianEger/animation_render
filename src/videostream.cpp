@@ -21,9 +21,9 @@ void VideoStream::openStream(std::string path)
     }
 
     // set width and height
-    if (width != 0 && height != 0){
-        cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
-        cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
+    if (mWidth != 0 && mHeight != 0){
+        cap->set(CV_CAP_PROP_FRAME_WIDTH, mWidth);
+        cap->set(CV_CAP_PROP_FRAME_HEIGHT, mHeight);
     }
 
     cv::Mat frame;
@@ -36,7 +36,7 @@ void VideoStream::openStream(std::string path)
 
     cam_info_msg = cam_info_manager.getCameraInfo();
 
-    ros::Rate r(fps);
+    ros::Rate r(mFPS);
     while (cap->get(CV_CAP_PROP_POS_FRAMES) != cap->get(CV_CAP_PROP_FRAME_COUNT)) {
         *cap >> frame;
 

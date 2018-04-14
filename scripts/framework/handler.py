@@ -2,6 +2,9 @@ import bpy
 import flickrapi
 from PIL import Image
 
+"""@package Handler
+Contains various handler for blender, testing and image retrieving.
+"""
 
 class BlenderHandler:
     # parameters
@@ -66,6 +69,13 @@ class BlenderHandler:
         self.bgr_tex.image = bpy.data.images.load(image)
         image_size = self.bgr_tex.image.size
         self.set_resolution(image_size[0], image_size[1])
+
+    def set_horizon_color(self, color):
+        self.world.horizon_color = color
+
+    def use_anti_aliasing(self, b):
+        self.scene.render.use_bake_antialiasing = b
+        self.scene.render.use_antialiasing = b
 
     @staticmethod
     def set_resolution(x, y):
