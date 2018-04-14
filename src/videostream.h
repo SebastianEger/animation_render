@@ -17,11 +17,26 @@ class VideoStream
 public:
     VideoStream(ros::NodeHandle rosH);
 
+    /*!
+     * \brief openStream
+     * \param path
+     */
     void openStream(std::string path);
 
-    int width;
-    int height;
-    int fps;
+    /*!
+     * \brief mWidth
+     */
+    int mWidth;
+
+    /*!
+     * \brief mHeight
+     */
+    int mHeight;
+
+    /*!
+     * \brief mFPS
+     */
+    int mFPS;
 
 private:
     ros::NodeHandle rosNodeHandle_;

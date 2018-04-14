@@ -15,5 +15,4 @@ with open(a.img_list[0], 'rb') as fp:
 image_data = request.urlopen(image_list[int(a.image_nr[0])]).read()
 
 tpl_image = Image.open(io.BytesIO(image_data))
-
 tpl_image.save(a.path[0])

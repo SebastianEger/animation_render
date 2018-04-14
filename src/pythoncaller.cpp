@@ -1,7 +1,7 @@
 #include "pythoncaller.h"
 
 PythonCaller::PythonCaller(ros::NodeHandle *nh) :
-    nH_(nh)
+    mpNodeHandle(nh)
 {
     pkg_path_ = ros::package::getPath("animation_render");
     python3_ = "python3 ";
@@ -96,7 +96,7 @@ void PythonCaller::get_init_pose(std::string animation, double &x, double &y, do
     FILE* out = execute_script(py_file + opt_anim, 3);
     fscanf(out, "%lf %lf %lf %lf %lf %lf", &x, &y, &z, &ax, &ay, &az);
 
-    delete[] out;
+    delete out;
 }
 
 FILE *PythonCaller::execute_script(std::string script, int version)
@@ -105,7 +105,7 @@ FILE *PythonCaller::execute_script(std::string script, int version)
     std::string execute_string;
     if(version == 2) execute_string = python_ + pkg_path_ + "/scripts/" + script;
     if(version == 3) execute_string = python3_ + pkg_path_ + "/scripts/" + script;
-    return(popen( execute_string.c_str(), "r") );
+    return( popen( execute_string.c_str(), "r") );
 }
 
 void PythonCaller::execute_script(std::string script)
