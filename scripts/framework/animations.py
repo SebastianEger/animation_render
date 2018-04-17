@@ -241,9 +241,10 @@ class TestInverseCompositional(Animation):
     def _add_keyframes(self, scene, blender_object, frames):
         blender_object.set_location((0, 0, -0.15))
         blender_object.set_rotation((0.0, 0, 0))
-
         blender_object.keyframe_insert("location", 1)
         blender_object.keyframe_insert("rotation_euler", 1)
+        # Initial Time
+        blender_object.keyframe_insert("location", int(frames/10))
 
         #blender_object.set_rotation((0, 0, 0))
         # blender_object.set_location((0, 0.03, -0.15))
@@ -251,8 +252,8 @@ class TestInverseCompositional(Animation):
         #blender_object.keyframe_insert("rotation_euler", int(frames/2))
 
         # blender_object.set_rotation((2*math.pi, 0, 0))
-        blender_object.set_location((0, 0.03, -0.15))
-        blender_object.set_rotation((0, 0, 0))
+        blender_object.set_location((0, 0, -0.15))
+        blender_object.set_rotation((0.5, 0, 0))
         blender_object.keyframe_insert("location", int(frames))
         blender_object.keyframe_insert("rotation_euler", int(frames))
 

@@ -18,8 +18,8 @@ public:
     VideoStream(ros::NodeHandle rosH);
 
     /*!
-     * \brief openStream
-     * \param path
+     * \brief openStream Reads video file and streams it over camera topic
+     * \param path Path of video file
      */
     void openStream(std::string path);
 
@@ -39,16 +39,41 @@ public:
     int mFPS;
 
 private:
+    /*!
+     * \brief rosNodeHandle_
+     */
     ros::NodeHandle rosNodeHandle_;
 
+    /*!
+     * \brief cap
+     */
     cv::VideoCapture *cap;
 
+    /*!
+     * \brief frameID_
+     */
     std::string frameID_;
+
+    /*!
+     * \brief cameraName_
+     */
     std::string cameraName_;
 
+    /*!
+     * \brief getDefaultCameraInfoFromImage
+     * \param img
+     * \return
+     */
     sensor_msgs::CameraInfo getDefaultCameraInfoFromImage(sensor_msgs::ImagePtr img);
 
+    /*!
+     * \brief it
+     */
     image_transport::ImageTransport *it;
+
+    /*!
+     * \brief pub
+     */
     image_transport::CameraPublisher pub;
 };
 
