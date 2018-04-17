@@ -7,6 +7,7 @@ option(BUILD_BLENDER_MODULE "Build the blender python module" OFF)
 
 find_package(catkin REQUIRED roscpp rospy std_msgs image_transport camera_info_manager cv_bridge)
 find_package(OpenCV REQUIRED)
+find_package(rostest REQUIRED)
 
 catkin_package(
     CATKIN_DEPENDS roscpp rospy std_msgs image_transport camera_info_manager cv_bridge
@@ -16,20 +17,32 @@ if(BUILD_BLENDER_MODULE)
   add_subdirectory(external)
 endif(BUILD_BLENDER_MODULE)
 
-include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} /usr/include/libxml2 src)
-
-
+include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS} /usr/include/libxml2 src)
 
 add_executable(${PROJECT_NAME}_node src/animationrender.cpp src/pythoncaller.cpp src/videostream.cpp src/imageevaluation.cpp)
 
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
-catkin_add_gtest(utest test/utest.cpp)
+if(CATKIN_ENABLE_TESTING)
+  catkin_add_gtest(utest test/utest.cpp src/videostream.cpp)
+  target_link_libraries(utest ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+endif(CATKIN_ENABLE_TESTING)
 
+if(CATKIN_ENABLE_TESTING)
+  add_rostest_gtest(videostream_test test/videostream_test.test test/videostream_test.cpp src/videostream.cpp)
+  target_link_libraries(videostream_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+endif(CATKIN_ENABLE_TESTING)
 
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+if(CATKIN_ENABLE_TESTING)
+  add_rostest_gtest(pythoncaller_test test/pythoncaller_test.test test/pythoncaller_test.cpp src/pythoncaller.cpp)
+  target_link_libraries(pythoncaller_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+endif(CATKIN_ENABLE_TESTING)
+
+if(CATKIN_ENABLE_TESTING)
+  add_rostest_gtest(animationrender_test test/animationrender_test.test test/animationrender_test.cpp src/animationrender.cpp)
+  target_link_libraries(animationrender_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+endif(CATKIN_ENABLE_TESTING)
+
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
