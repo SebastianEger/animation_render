@@ -21,7 +21,7 @@ public:
     PythonCaller(ros::NodeHandle *nh);
 
     /*!
-     * \brief render_video Render video
+     * \brief renderVideo Render video
      * \param frames Number frames
      * \param fps Frames per second
      * \param object Name of object: Plane, Cylinder
@@ -32,48 +32,48 @@ public:
      * \param mp2 Model parameter 2
      * \param mp3 Model parameter 3
      */
-    void render_video(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3);
+    void renderVideo(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3);
 
     /*!
-     * \brief get_template_image_list Creates a list of template image urls
+     * \brief getTemplateImageList Creates a list of template image urls
      * \param length Length of list
      * \param min_height Minimal height of images
      * \param min_width Minimal width of images
      * \param keywords Some keywords to search for
      */
-    void get_template_image_list(int length, int min_height, int min_width, std::string keywords);
+    void getTemplateImageList(int length, int min_height, int min_width, std::string keywords);
 
     /*!
-     * \brief get_background_image_list Creates a list of background image urls
+     * \brief getBackgroundImageList Creates a list of background image urls
      * \param length Length of list
      * \param min_height Minimal height of images
      * \param min_width Minimal width of images
      * \param keywords Some keywords to search for
      */
-    void get_background_image_list(int length, int min_height, int min_width, std::string keywords);
+    void getBackgroundImageList(int length, int min_height, int min_width, std::string keywords);
 
     /*!
-     * \brief download_template_image Download template image from list
+     * \brief downloadTemplateImage Download template image from list
      * \param nr Index of image
      */
-    void download_template_image(int nr);
+    void downloadTemplateImage(int nr);
 
     /*!
-     * \brief download_background_image Donwload background image from list
+     * \brief downloadBackgroundImage Donwload background image from list
      * \param nr Index of image
      */
-    void download_background_image(int nr);
+    void downloadBackgroundImage(int nr);
 
     /*!
-     * \brief get_ground_truth_data Get the ground truth data of given animation
+     * \brief getGroundTruthData Get the ground truth data of given animation
      * \param animation Name of animation
      * \param frames Number of frames
      * \param path output path
      */
-    void get_ground_truth_data(std::string animation, int frames, std::string path);
+    void getGroundTruthData(std::string animation, int frames, std::string path);
 
     /*!
-     * \brief get_init_pose Get init pose of animation
+     * \brief getInitPose Get init pose of animation
      * \param animation Name of animation
      * \param x x position
      * \param y y position
@@ -82,7 +82,7 @@ public:
      * \param ay angle y
      * \param az angle z
      */
-    void get_init_pose(std::string animation, Pose &pose);
+    void getInitPose(std::string animation, Pose &initPose);
 
 private:
 
