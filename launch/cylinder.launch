@@ -30,6 +30,6 @@
         <param name="skip_render" value="true"/>
         <param name="skip_img_list" value="true"/>
 
-        <param name="template_resize" value="200"/>
+        <param name="template_resize" value="100"/>
     </node>
 </launch>

@@ -6,6 +6,15 @@
 
 #include <stdio.h>
 
+struct Pose {
+    double x;
+    double y;
+    double z;
+    double ax;
+    double ay;
+    double az;
+};
+
 class PythonCaller
 {
 public:
@@ -73,26 +82,41 @@ public:
      * \param ay angle y
      * \param az angle z
      */
-    void get_init_pose(std::string animation, double &x, double &y, double &z, double &ax, double &ay, double &az);
+    void get_init_pose(std::string animation, Pose &pose);
 
 private:
 
+    /*!
+     * \brief mpNodeHandle Pointer to ros node handle
+     */
     ros::NodeHandle *mpNodeHandle;
 
-    std::string pkg_path_;
-    std::string python3_, python_;
+    /*!
+     * \brief mPkgPath Path to this node
+     */
+    std::string mPkgPath;
 
     /*!
-     * \brief execute_script
-     * \param script
-     * \param version
-     * \return
+     * \brief mPython3 python3 command
+     */
+    std::string mPython3;
+
+    /*!
+     * \brief mPython python command
+     */
+    std::string mPython;
+
+    /*!
+     * \brief execute_script Executes python scripts
+     * \param script name of script
+     * \param version python versionn, 2 or 3
+     * \return Output of executed python script
      */
     FILE* execute_script(std::string script, int version);
 
     /*!
-     * \brief execute_script
-     * \param script
+     * \brief execute_script Executes python script
+     * \param script name of script
      */
     void execute_script(std::string script);
 };

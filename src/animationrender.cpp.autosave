@@ -43,10 +43,10 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     // Get parameters
     getTestParameters();
 
-    if(!skipGroundTruth_) {
+    if(!mSkipGroundTruth) {
         std::string dataPath;
         mGlobalNodeHandle.param<std::string>("/tplsearch/data_path", dataPath, "~/tplsearch_data");
-        mpPyCaller->get_ground_truth_data(animation_, mFrames, dataPath + "/ground_truth");
+        mpPyCaller->get_ground_truth_data(mAnimation, mFrames, dataPath + "/ground_truth");
     }
 
     // Init template parameters
@@ -67,10 +67,10 @@ AnimationRender::~AnimationRender()
 
 void AnimationRender::start()
 {
-    mpPyCaller->get_init_pose(animation_, mInitPose);
-    if(!skipImgList_) {
-        mpPyCaller->get_template_image_list(mListLength, template_min_height_, template_min_width_, template_keywords_);
-        mpPyCaller->get_background_image_list(mListLength, background_min_height_, background_min_width_, background_keywords_);
+    mpPyCaller->get_init_pose(mAnimation, mInitPose);
+    if(!mSkipImgList) {
+        mpPyCaller->get_template_image_list(mListLength, mTemplateMinHeight, mTemplateMinWidth, mTemplateKeywords);
+        mpPyCaller->get_background_image_list(mListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
     }
 
     // Create template and model parameters
@@ -87,11 +87,11 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         start();
     }
     if(msg->data == "RenderVideo") {
-        mpPyCaller->render_video(mFrames, mFPS, object_, animation_, res_x_, res_y_, mModelParameter1, mModelParameter2, mModelParameter3);
+        mpPyCaller->render_video(mFrames, mFPS, mObject, mAnimation, mWidth, mHeight, mModelParameter1, mModelParameter2, mModelParameter3);
     }
     if(msg->data == "CreateImageList") {
-        mpPyCaller->get_template_image_list(mListLength, template_min_height_, template_min_width_, template_keywords_);
-        mpPyCaller->get_background_image_list(mListLength, background_min_height_, background_min_width_, background_keywords_);
+        mpPyCaller->get_template_image_list(mListLength, mTemplateMinHeight, mTemplateMinWidth, mTemplateKeywords);
+        mpPyCaller->get_background_image_list(mListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
     }
     if(msg->data == "DownloadNextImage") {
         mpPyCaller->download_template_image(mCurrentTemplateImgID);
@@ -124,7 +124,7 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
 void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
 {
     if(msg->data == "InitOK") {
-        if(!skipRender_) mpPyCaller->render_video(mFrames, mFPS, object_, animation_, res_x_, res_y_, mModelParameter1, mModelParameter2, mModelParameter3);
+        if(!mSkipRender) mpPyCaller->render_video(mFrames, mFPS, mObject, mAnimation, mWidth, mHeight, mModelParameter1, mModelParameter2, mModelParameter3);
         mpVideoStream->mFPS = mFPS;
         mpVideoStream->openStream(ros::package::getPath("animation_render") + "/render/video.avi");
         trackerControlPublish("ExportData");
@@ -140,7 +140,7 @@ void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
             ros::shutdown();
             return;
         }
-        if(!skipImageDownload_) {
+        if(!mSkipImageDownload) {
             mpPyCaller->download_template_image(mCurrentTemplateImgID);
             mpPyCaller->download_background_image(mCurrentBackgroundImgID);
         }
@@ -156,31 +156,31 @@ void AnimationRender::getTestParameters()
     mpNodeHandle->param<int>("list_length", mListLength, 100);
 
     //
-    mpNodeHandle->param<bool>("skip_render",         skipRender_,        false);
-    mpNodeHandle->param<bool>("skip_img_list",       skipImgList_,       false);
-    mpNodeHandle->param<bool>("skip_ground_truth",   skipGroundTruth_,   false);
-    mpNodeHandle->param<bool>("skip_image_download", skipImageDownload_, false);
+    mpNodeHandle->param<bool>("skip_render",         mSkipRender,        false);
+    mpNodeHandle->param<bool>("skip_img_list",       mSkipImgList,       false);
+    mpNodeHandle->param<bool>("skip_ground_truth",   mSkipGroundTruth,   false);
+    mpNodeHandle->param<bool>("skip_image_download", mSkipImageDownload, false);
 
     // Video parameters
     mpNodeHandle->param<int>("frames",              mFrames, 100);
     mpNodeHandle->param<int>("fps",                 mFPS,    25);
-    mpNodeHandle->param<int>("render_image_width",  res_x_,  600);
-    mpNodeHandle->param<int>("render_image_height", res_y_,  600);
+    mpNodeHandle->param<int>("render_image_width",  mWidth,  600);
+    mpNodeHandle->param<int>("render_image_height", mHeight,  600);
 
-    mpNodeHandle->param<std::string>("animation",           animation_,           "Rotation");
-    mpNodeHandle->param<std::string>("object",              object_,              "Cylinder");
-    mpNodeHandle->param<std::string>("template_keywords",   template_keywords_,   "bird");
-    mpNodeHandle->param<std::string>("background_keywords", background_keywords_, "plane");
+    mpNodeHandle->param<std::string>("animation",           mAnimation,           "Rotation");
+    mpNodeHandle->param<std::string>("object",              mObject,              "Cylinder");
+    mpNodeHandle->param<std::string>("template_keywords",   mTemplateKeywords,   "bird");
+    mpNodeHandle->param<std::string>("background_keywords", mBackgroundKeywords, "plane");
 
     // Model parameters
     mpNodeHandle->param<double>("model_parameter_1", mModelParameter1, 0.05);
     mpNodeHandle->param<double>("model_parameter_2", mModelParameter2, 0.01);
     mpNodeHandle->param<double>("model_parameter_3", mModelParameter3, 200);
 
-    mpNodeHandle->param<int>("template_min_height",   template_min_height_,   500);
-    mpNodeHandle->param<int>("template_min_width",    template_min_width_,    500);
-    mpNodeHandle->param<int>("background_min_height", background_min_height_, 500);
-    mpNodeHandle->param<int>("background_min_width",  background_min_width_,  500);
+    mpNodeHandle->param<int>("template_min_height",   mTemplateMinHeight,   500);
+    mpNodeHandle->param<int>("template_min_width",    mTemplateMinWidth,    500);
+    mpNodeHandle->param<int>("background_min_height", mBackgroundMinHeight, 500);
+    mpNodeHandle->param<int>("background_min_width",  mBackgroundMinWidth,  500);
 
     // Template parameters
     mpNodeHandle->param<int>("template_resize",  mResize,  100);
@@ -193,7 +193,7 @@ void AnimationRender::setTemplateModelParameters()
     mTemplateParameters[0]["filename"] = ros::package::getPath("animation_render") + "/img/template_image.jpg";
     mTemplateParameters[0]["resize"]   = mResize;
 
-    mModelParameters[0]["model_name"] = object_;
+    mModelParameters[0]["model_name"] = mObject;
     mModelParameters[0]["x"]      = mInitPose.x;
     mModelParameters[0]["y"]      = mInitPose.y;
     mModelParameters[0]["z"]      = mInitPose.z;
