@@ -19,7 +19,7 @@ endif(BUILD_BLENDER_MODULE)
 
 include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS} /usr/include/libxml2 src)
 
-add_executable(${PROJECT_NAME}_node src/animationrender.cpp src/pythoncaller.cpp src/videostream.cpp src/imageevaluation.cpp)
+add_executable(${PROJECT_NAME}_node src/main.cpp src/animationrender.cpp src/pythoncaller.cpp src/videostream.cpp src/imageevaluation.cpp)
 
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
@@ -39,7 +39,7 @@ if(CATKIN_ENABLE_TESTING)
 endif(CATKIN_ENABLE_TESTING)
 
 if(CATKIN_ENABLE_TESTING)
-  add_rostest_gtest(animationrender_test test/animationrender_test.test test/animationrender_test.cpp src/animationrender.cpp)
+  add_rostest_gtest(animationrender_test test/animationrender_test.test test/animationrender_test.cpp src/animationrender.cpp src/pythoncaller.cpp src/videostream.cpp src/imageevaluation.cpp)
   target_link_libraries(animationrender_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 endif(CATKIN_ENABLE_TESTING)
 
