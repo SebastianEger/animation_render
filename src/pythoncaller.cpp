@@ -8,7 +8,7 @@ PythonCaller::PythonCaller(ros::NodeHandle *nh) :
     mPython = "python ";
 }
 
-void PythonCaller::render_video(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3)
+void PythonCaller::renderVideo(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3)
 {
     std::string py_file = "render_video.py";
     std::string opt_frames = " --frames " + std::to_string(frames);
@@ -36,7 +36,7 @@ void PythonCaller::render_video(int frames, int fps, std::string object, std::st
                    + output);
 }
 
-void PythonCaller::get_template_image_list(int length, int min_height, int min_width, std::string keywords)
+void PythonCaller::getTemplateImageList(int length, int min_height, int min_width, std::string keywords)
 {
     std::string py_file = "generate_image_list.py";
     std::string opt_length = " --length " + std::to_string(length);
@@ -46,7 +46,7 @@ void PythonCaller::get_template_image_list(int length, int min_height, int min_w
     execute_script(py_file + opt_length + opt_min_size + path + " --keywords " + keywords);
 }
 
-void PythonCaller::get_background_image_list(int length, int min_height, int min_width, std::string keywords)
+void PythonCaller::getBackgroundImageList(int length, int min_height, int min_width, std::string keywords)
 {
     std::string py_file = "generate_image_list.py";
 
@@ -57,7 +57,7 @@ void PythonCaller::get_background_image_list(int length, int min_height, int min
     execute_script(py_file + opt_length + opt_min_size + path + " --keywords " + keywords);
 }
 
-void PythonCaller::download_template_image(int nr)
+void PythonCaller::downloadTemplateImage(int nr)
 {
     std::string py_file = "download_image.py";
 
@@ -67,7 +67,7 @@ void PythonCaller::download_template_image(int nr)
     execute_script(py_file + path + img_list + " --image_nr " + std::to_string(nr));
 }
 
-void PythonCaller::download_background_image(int nr)
+void PythonCaller::downloadBackgroundImage(int nr)
 {
     std::string py_file = "download_image.py";
 
@@ -77,7 +77,7 @@ void PythonCaller::download_background_image(int nr)
     execute_script(py_file + path + img_list + " --image_nr " + std::to_string(nr));
 }
 
-void PythonCaller::get_ground_truth_data(std::string animation, int frames, std::string path)
+void PythonCaller::getGroundTruthData(std::string animation, int frames, std::string path)
 {
      std::string py_file = "get_ground_truth.py";
 
@@ -88,13 +88,13 @@ void PythonCaller::get_ground_truth_data(std::string animation, int frames, std:
      execute_script(py_file + opt_path + opt_anim + opt_frames);
 }
 
-void PythonCaller::get_init_pose(std::string animation, Pose &pose)
+void PythonCaller::getInitPose(std::string animation, Pose &initPose)
 {
     std::string py_file = "get_init_pose.py";
     std::string opt_anim = " --anim " + animation;
 
     FILE* out = execute_script(py_file + opt_anim, 3);
-    fscanf(out, "%lf %lf %lf %lf %lf %lf", &pose.x, &pose.y, &pose.z, &pose.ax, &pose.ay, &pose.az);
+    fscanf(out, "%lf %lf %lf %lf %lf %lf", &initPose.x, &initPose.y, &initPose.z, &initPose.ax, &initPose.ay, &initPose.az);
 
     delete out;
 }
