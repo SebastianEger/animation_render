@@ -11,7 +11,7 @@ a = parser.parse_args()
 
 bdr_handler = BlenderHandler("")
 
-object = Plane(0.02, 0.02)
+object = Plane(0.02, 0.02, 0)
 
 animation_class = getattr(importlib.import_module("framework.animations"), a.anim[0])
 animation_class(bdr_handler, object, int(a.frames[0]))

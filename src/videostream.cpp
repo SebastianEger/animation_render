@@ -1,46 +1,46 @@
 #include "videostream.h"
 
 VideoStream::VideoStream(ros::NodeHandle rosH) :
-    rosNodeHandle_(rosH)
+    mNodeHandle(rosH)
 {
-    cap = new cv::VideoCapture();
-    it  = new image_transport::ImageTransport(rosH);
+    mpVideoCapture = new cv::VideoCapture();
+    mpImageTransport  = new image_transport::ImageTransport(rosH);
 
-    pub = it->advertiseCamera("/camera", 1);
+    mPub = mpImageTransport->advertiseCamera("/camera", 1);
 
-    frameID_ = "camera";
+    mFrameID = "camera";
 }
 
 void VideoStream::openStream(std::string path)
 {
-    cap->open(path);
+    mpVideoCapture->open(path);
 
-    if(!cap->isOpened()){
+    if(!mpVideoCapture->isOpened()){
         ROS_ERROR_STREAM("Could not open the stream.");
         return;
     }
 
     // set width and height
     if (mWidth != 0 && mHeight != 0){
-        cap->set(CV_CAP_PROP_FRAME_WIDTH, mWidth);
-        cap->set(CV_CAP_PROP_FRAME_HEIGHT, mHeight);
+        mpVideoCapture->set(CV_CAP_PROP_FRAME_WIDTH, mWidth);
+        mpVideoCapture->set(CV_CAP_PROP_FRAME_HEIGHT, mHeight);
     }
 
     cv::Mat frame;
     sensor_msgs::ImagePtr msg;
     sensor_msgs::CameraInfo cam_info_msg;
     std_msgs::Header header;
-    header.frame_id = frameID_;
+    header.frame_id = mFrameID;
 
-    camera_info_manager::CameraInfoManager cam_info_manager(rosNodeHandle_, cameraName_, "");
+    camera_info_manager::CameraInfoManager cam_info_manager(mNodeHandle, mCameraName, "");
 
     cam_info_msg = cam_info_manager.getCameraInfo();
 
     ros::Rate r(mFPS);
-    while (cap->get(CV_CAP_PROP_POS_FRAMES) != cap->get(CV_CAP_PROP_FRAME_COUNT)) {
-        *cap >> frame;
+    while (mpVideoCapture->get(CV_CAP_PROP_POS_FRAMES) != mpVideoCapture->get(CV_CAP_PROP_FRAME_COUNT)) {
+        *mpVideoCapture >> frame;
 
-        if (pub.getNumSubscribers() > 0){
+        if (mPub.getNumSubscribers() > 0){
 
             if(!frame.empty()) {
                 msg = cv_bridge::CvImage(header, "bgr8", frame).toImageMsg();
@@ -50,7 +50,7 @@ void VideoStream::openStream(std::string path)
                     cam_info_msg = getDefaultCameraInfoFromImage(msg);
                     cam_info_manager.setCameraInfo(cam_info_msg);
                 }
-                pub.publish(*msg, cam_info_msg, ros::Time::now());
+                mPub.publish(*msg, cam_info_msg, ros::Time::now());
             } else {
                 ROS_ERROR_STREAM("Empty frame.");
                 return;

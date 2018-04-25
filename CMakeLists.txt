@@ -3,7 +3,7 @@ add_compile_options(-std=c++11)
 cmake_minimum_required(VERSION 2.8.3)
 project(animation_render)
 
-option(BUILD_BLENDER_MODULE "Build the blender python module" OFF)
+option(BUILD_BLENDER_MODULE "Build the blender python module" ON)
 
 find_package(catkin REQUIRED roscpp rospy std_msgs image_transport camera_info_manager cv_bridge)
 find_package(OpenCV REQUIRED)
@@ -13,9 +13,9 @@ catkin_package(
     CATKIN_DEPENDS roscpp rospy std_msgs image_transport camera_info_manager cv_bridge
 )
 
-if(BUILD_BLENDER_MODULE)
+if(BUILD_BLENDER_MODULE AND NOT EXISTS "/usr/lib/python3.5/site-packages/bpy.so")
   add_subdirectory(external)
-endif(BUILD_BLENDER_MODULE)
+endif(BUILD_BLENDER_MODULE AND NOT EXISTS "/usr/lib/python3.5/site-packages/bpy.so")
 
 include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS} /usr/include/libxml2 src)
 

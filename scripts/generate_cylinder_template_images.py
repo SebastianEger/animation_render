@@ -22,7 +22,7 @@ bldr_handler.use_anti_aliasing(False)
 
 cylinder = objects.Cylinder(a.l[0], a.r[0], a.f[0], a.img[0])
 
-cylinder.set_location((0, 0, -0.10))
+cylinder.set_location((0, 0, -0.15))
 for i in range(int(a.n[0])):
     angle_x = i*2*math.pi/float(a.n[0])
     file_name = "/home/sebastian/catkin_ws/src/tplsearch/img/cylinder/template_" + str(i) + ".png"
