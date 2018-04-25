@@ -15,6 +15,8 @@
 class AnimationRender
 {
 public:
+
+    AnimationRender();
     /*!
      * \brief AnimationRender Constructor
      * \param nH

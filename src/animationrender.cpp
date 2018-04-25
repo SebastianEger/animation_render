@@ -1,5 +1,10 @@
 #include "animationrender.h"
 
+AnimationRender::AnimationRender()
+{
+    mpNodeHandle = new ros::NodeHandle("~");
+}
+
 AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     mpNodeHandle(nH)
 {
@@ -28,11 +33,13 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     // Get parameters
     getTestParameters();
 
+    /*
     if(!mSkipGroundTruth) {
         std::string dataPath;
         mGlobalNodeHandle.param<std::string>("/tplsearch/data_path", dataPath, "~/tplsearch_data");
         mpPyCaller->getGroundTruthData(mAnimation, mFrames, dataPath + "/ground_truth");
     }
+    */
 
     // Init template parameters
     mTemplateParameters    = XmlRpc::XmlRpcValue();
@@ -104,6 +111,9 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         std::string path =  ros::package::getPath("animation_render") +  "/img/template_image.jpg";
         mpTemplateEvaluation->evaluateTemplate(path);
     }
+    if(msg->data == "ExportGroundTruth") {
+        mpPyCaller->getGroundTruthData(mAnimation, mFrames,  ros::package::getPath("animation_render") + "/ground_truth");
+    }
 }
 
 void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
@@ -143,17 +153,17 @@ void AnimationRender::getTestParameters()
     //
     mpNodeHandle->param<bool>("skip_render",         mSkipRender,        false);
     mpNodeHandle->param<bool>("skip_img_list",       mSkipImgList,       false);
-    mpNodeHandle->param<bool>("skip_ground_truth",   mSkipGroundTruth,   false);
+    mpNodeHandle->param<bool>("skip_ground_truth",   mSkipGroundTruth,   true);
     mpNodeHandle->param<bool>("skip_image_download", mSkipImageDownload, false);
 
     // Video parameters
     mpNodeHandle->param<int>("frames",              mFrames, 100);
     mpNodeHandle->param<int>("fps",                 mFPS,    25);
     mpNodeHandle->param<int>("render_image_width",  mWidth,  600);
-    mpNodeHandle->param<int>("render_image_height", mHeight,  600);
+    mpNodeHandle->param<int>("render_image_height", mHeight, 600);
 
-    mpNodeHandle->param<std::string>("animation",           mAnimation,           "Rotation");
-    mpNodeHandle->param<std::string>("object",              mObject,              "Cylinder");
+    mpNodeHandle->param<std::string>("animation",           mAnimation,          "TestAnimation");
+    mpNodeHandle->param<std::string>("object",              mObject,             "Cylinder");
     mpNodeHandle->param<std::string>("template_keywords",   mTemplateKeywords,   "bird");
     mpNodeHandle->param<std::string>("background_keywords", mBackgroundKeywords, "plane");
 

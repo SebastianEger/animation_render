@@ -23,7 +23,7 @@
         <param name="render_image_height" value="500"/>
 
         <param name="fps" value="25"/>
-        <param name="frames" value="500"/>
+        <param name="frames" value="1000"/>
 
         <param name="skip_image_download" value="true"/>
         <param name="skip_ground_truth" value="true"/>

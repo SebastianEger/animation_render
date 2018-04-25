@@ -40,24 +40,24 @@ public:
 
 private:
     /*!
-     * \brief rosNodeHandle_
+     * \brief mNodeHandle
      */
-    ros::NodeHandle rosNodeHandle_;
+    ros::NodeHandle mNodeHandle;
 
     /*!
-     * \brief cap
+     * \brief mpVideoCapture Point to VideoCapture class
      */
-    cv::VideoCapture *cap;
+    cv::VideoCapture *mpVideoCapture;
 
     /*!
-     * \brief frameID_
+     * \brief mFrameID Frame ID for header
      */
-    std::string frameID_;
+    std::string mFrameID;
 
     /*!
-     * \brief cameraName_
+     * \brief mCameraName Name of camera
      */
-    std::string cameraName_;
+    std::string mCameraName;
 
     /*!
      * \brief getDefaultCameraInfoFromImage
@@ -67,14 +67,14 @@ private:
     sensor_msgs::CameraInfo getDefaultCameraInfoFromImage(sensor_msgs::ImagePtr img);
 
     /*!
-     * \brief it
+     * \brief mpImageTransport
      */
-    image_transport::ImageTransport *it;
+    image_transport::ImageTransport *mpImageTransport;
 
     /*!
-     * \brief pub
+     * \brief mPub Image publisher
      */
-    image_transport::CameraPublisher pub;
+    image_transport::CameraPublisher mPub;
 };
 
 #endif // VIDEOSTREAM_H
