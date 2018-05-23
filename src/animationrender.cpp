@@ -3,12 +3,14 @@
 AnimationRender::AnimationRender()
 {
     mpNodeHandle = new ros::NodeHandle("~");
+    mTemplateFilename = ros::package::getPath("animation_render") +  "/img/template_image.jpg";
 }
 
 AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     mpNodeHandle(nH)
 {
     mGlobalNodeHandle = ros::NodeHandle();
+    mTemplateFilename = ros::package::getPath("animation_render") +  "/img/template_image.jpg";
 
     mpPyCaller           = new PythonCaller(&mGlobalNodeHandle);
     mpVideoStream        = new VideoStream(mGlobalNodeHandle);
@@ -85,6 +87,19 @@ void AnimationRender::start()
     trackerControlPublish("Init");
 }
 
+bool AnimationRender::downloadTemplateImage()
+{
+    mpPyCaller->downloadTemplateImage(mCurrentTemplateImgID);
+    while(!mpTemplateEvaluation->evaluate(mTemplateFilename)) {
+        mCurrentTemplateImgID ++;
+        if(mCurrentTemplateImgID == mListLength) {
+            return false;
+        }
+        mpPyCaller->downloadTemplateImage(mCurrentTemplateImgID);
+    }
+    return true;
+}
+
 void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
 {
     // COMMANDS
@@ -97,17 +112,19 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
     if(msg->data == "RenderAllVideos") {
         mCurrentTemplateImgID   = 0;
         mCurrentBackgroundImgID = 0;
+        if(!downloadTemplateImage()) return;
+        mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
         while(true) {
             std::string filename = mRenderFilename + "_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
             mpPyCaller->renderVideo(filename, mFrames, mFPS, mObject, mAnimation, mWidth, mHeight, mModelParameter1, mModelParameter2, mModelParameter3);
-            mCurrentTemplateImgID ++;
-            if(mCurrentTemplateImgID == mListLength) {
-                mCurrentBackgroundImgID ++;
-                mCurrentTemplateImgID = 0;
-                mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
+            mCurrentBackgroundImgID ++;
+            if(mCurrentBackgroundImgID == mListLength) {
+                mCurrentBackgroundImgID = 0;
+                mCurrentTemplateImgID ++;
+                //mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
+                if(!downloadTemplateImage()) break;;
             }
-            mpPyCaller->downloadTemplateImage(mCurrentTemplateImgID);
-            if(mCurrentBackgroundImgID == mListLength) break;
+            mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
         }
     }
     if(msg->data == "CreateImageList") {

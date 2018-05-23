@@ -36,6 +36,20 @@ public:
     bool mAutostart;
 
 private:
+    bool downloadTemplateImage();
+
+    /*!
+     * \brief controlCallback Callback function of /animation_render/control topic
+     * \param msg Command
+     */
+    void controlCallback(const std_msgs::String::ConstPtr &msg);
+
+    /*!
+     * \brief responseCallback Callback function of /animation_render/response topic
+     * \param msg Response
+     */
+    void responseCallback(const std_msgs::String::ConstPtr &msg);
+
     /*!
      * \brief mpNodeHandle
      */
@@ -75,18 +89,6 @@ private:
      * \brief mTemplateEvaluation Pointer to ImageEvaluation class
      */
     TemplateEvaluation *mpTemplateEvaluation;
-
-    /*!
-     * \brief controlCallback Callback function of /animation_render/control topic
-     * \param msg Command
-     */
-    void controlCallback(const std_msgs::String::ConstPtr &msg);
-
-    /*!
-     * \brief responseCallback Callback function of /animation_render/response topic
-     * \param msg Response
-     */
-    void responseCallback(const std_msgs::String::ConstPtr &msg);
 
     /*!
      * \brief mCurrentTemplateImgID Number of current template in template image list.
@@ -184,6 +186,8 @@ private:
     bool mSkipImageDownload;
 
     std::string mRenderFilename;
+
+    std::string mTemplateFilename;
 
     /*!
      * \brief mAnimation Animation name
