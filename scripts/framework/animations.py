@@ -84,7 +84,7 @@ class RotationZ(Animation):
         # init time
         blender_object.keyframe_insert("rotation_euler", int(frames/10))
 
-        blender_object.set_rotation((0, 0, math.pi))
+        blender_object.set_rotation((0, 0, 2*math.pi))
 
         blender_object.keyframe_insert("rotation_euler", int(frames))
 

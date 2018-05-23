@@ -32,7 +32,7 @@ public:
      * \param mp2 Model parameter 2
      * \param mp3 Model parameter 3
      */
-    void renderVideo(int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3);
+    void renderVideo(std::string filename, int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3);
 
     /*!
      * \brief getTemplateImageList Creates a list of template image urls

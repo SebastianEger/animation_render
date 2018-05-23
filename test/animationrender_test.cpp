@@ -3,29 +3,6 @@
 
 #include <thread>
 
-
-
-class AnimationRenderTestSuite : public ::testing::Test {
-private:
-    ros::Publisher mPublisher;
-    ros::NodeHandle mNodeHandle;
-    AnimationRender mAnimationRender;
-
-public:
-    AnimationRenderTestSuite() {
-        mNodeHandle = ros::NodeHandle();
-        mAnimationRender = AnimationRender(&mNodeHandle);
-        mPublisher = mNodeHandle.advertise<std_msgs::String>("/animation_render/control", 1);
-    }
-
-    void publish() {}
-    ~AnimationRenderTestSuite() {}
-};
-
-TEST_F(AnimationRenderTestSuite, createImageList) {
-
-}
-
 TEST(TestControlCommands, createImageList) {
 
     ros::NodeHandle nH;

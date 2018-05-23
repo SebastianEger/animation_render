@@ -10,9 +10,9 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
 {
     mGlobalNodeHandle = ros::NodeHandle();
 
-    mpPyCaller          = new PythonCaller(&mGlobalNodeHandle);
+    mpPyCaller           = new PythonCaller(&mGlobalNodeHandle);
     mpVideoStream        = new VideoStream(mGlobalNodeHandle);
-    mpTemplateEvaluation = new ImageEvaluation();
+    mpTemplateEvaluation = new TemplateEvaluation();
 
     // Set fps to default 25
     mpVideoStream->mFPS = 25;
@@ -33,13 +33,12 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     // Get parameters
     getTestParameters();
 
-    /*
+    // Create ground truth data
     if(!mSkipGroundTruth) {
         std::string dataPath;
         mGlobalNodeHandle.param<std::string>("/tplsearch/data_path", dataPath, "~/tplsearch_data");
         mpPyCaller->getGroundTruthData(mAnimation, mFrames, dataPath + "/ground_truth");
     }
-    */
 
     // Init template parameters
     mTemplateParameters    = XmlRpc::XmlRpcValue();
@@ -48,6 +47,10 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     // Init model parameters
     mModelParameters    = XmlRpc::XmlRpcValue();
     mModelParameters[0] = XmlRpc::XmlRpcValue();
+
+    if(mAutostart) {
+        start();
+    }
 }
 
 AnimationRender::~AnimationRender()
@@ -60,9 +63,19 @@ AnimationRender::~AnimationRender()
 void AnimationRender::start()
 {
     mpPyCaller->getInitPose(mAnimation, mInitPose);
+
+    mCurrentTemplateImgID   = 0;
+    mCurrentBackgroundImgID = 0;
+
+    // Create image list for background and templates
     if(!mSkipImgList) {
         mpPyCaller->getTemplateImageList(mListLength, mTemplateMinHeight, mTemplateMinWidth, mTemplateKeywords);
         mpPyCaller->getBackgroundImageList(mListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
+    }
+
+    if(!mSkipImageDownload) {
+        mpPyCaller->downloadTemplateImage(mCurrentTemplateImgID);
+        mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
     }
 
     // Create template and model parameters
@@ -79,25 +92,40 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         start();
     }
     if(msg->data == "RenderVideo") {
-        mpPyCaller->renderVideo(mFrames, mFPS, mObject, mAnimation, mWidth, mHeight, mModelParameter1, mModelParameter2, mModelParameter3);
+        mpPyCaller->renderVideo(mRenderFilename, mFrames, mFPS, mObject, mAnimation, mWidth, mHeight, mModelParameter1, mModelParameter2, mModelParameter3);
+    }
+    if(msg->data == "RenderAllVideos") {
+        mCurrentTemplateImgID   = 0;
+        mCurrentBackgroundImgID = 0;
+        while(true) {
+            std::string filename = mRenderFilename + "_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
+            mpPyCaller->renderVideo(filename, mFrames, mFPS, mObject, mAnimation, mWidth, mHeight, mModelParameter1, mModelParameter2, mModelParameter3);
+            mCurrentTemplateImgID ++;
+            if(mCurrentTemplateImgID == mListLength) {
+                mCurrentBackgroundImgID ++;
+                mCurrentTemplateImgID = 0;
+                mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
+            }
+            mpPyCaller->downloadTemplateImage(mCurrentTemplateImgID);
+            if(mCurrentBackgroundImgID == mListLength) break;
+        }
     }
     if(msg->data == "CreateImageList") {
         mpPyCaller->getTemplateImageList(mListLength, mTemplateMinHeight, mTemplateMinWidth, mTemplateKeywords);
         mpPyCaller->getBackgroundImageList(mListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
     }
     if(msg->data == "DownloadNextImage") {
-        mpPyCaller->downloadTemplateImage(mCurrentTemplateImgID);
-        mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
-
-        mCurrentBackgroundImgID ++;
-        if(mCurrentBackgroundImgID == mListLength) {
-            mCurrentTemplateImgID ++;
-            mCurrentBackgroundImgID = 0;
+        mCurrentTemplateImgID ++;
+        if(mCurrentTemplateImgID == mListLength) {
+            mCurrentBackgroundImgID ++;
+            mCurrentTemplateImgID = 0;
+            mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
         }
+        mpPyCaller->downloadTemplateImage(mCurrentTemplateImgID);
     }
     if(msg->data == "RunVideo") {
         mpVideoStream->mFPS = mFPS;
-        mpVideoStream->openStream(ros::package::getPath("animation_render") + "/render/video.avi");
+        mpVideoStream->openStream(ros::package::getPath("animation_render") + "/render/" + mRenderFilename + ".avi");
         trackerControlPublish("ExportData");
     }
     if(msg->data == "SetParameters") {
@@ -105,11 +133,15 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
     }
     if(msg->data == "ShowTemplate") {
         std::string path =  ros::package::getPath("animation_render") +  "/img/template_image.jpg";
-        ImageEvaluation::showImage(path);
+        TemplateEvaluation::showImage(path);
     }
     if(msg->data == "EvaluateTemplate") {
         std::string path =  ros::package::getPath("animation_render") +  "/img/template_image.jpg";
-        mpTemplateEvaluation->evaluateTemplate(path);
+
+        double acc_x, acc_y;
+        mpTemplateEvaluation->evaluate(path, acc_x, acc_y);
+
+        ROS_INFO_STREAM("Acceptance: x: " << std::to_string(acc_x) << " y: " << std::to_string(acc_y));
     }
     if(msg->data == "ExportGroundTruth") {
         mpPyCaller->getGroundTruthData(mAnimation, mFrames,  ros::package::getPath("animation_render") + "/ground_truth");
@@ -119,9 +151,9 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
 void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
 {
     if(msg->data == "InitOK") {
-        if(!mSkipRender) mpPyCaller->renderVideo(mFrames, mFPS, mObject, mAnimation, mWidth, mHeight, mModelParameter1, mModelParameter2, mModelParameter3);
+        if(!mSkipRender) mpPyCaller->renderVideo(mRenderFilename, mFrames, mFPS, mObject, mAnimation, mWidth, mHeight, mModelParameter1, mModelParameter2, mModelParameter3);
         mpVideoStream->mFPS = mFPS;
-        mpVideoStream->openStream(ros::package::getPath("animation_render") + "/render/video.avi");
+        mpVideoStream->openStream(ros::package::getPath("animation_render") + "/render/" + mRenderFilename + ".avi");
         trackerControlPublish("ExportData");
     }
     if(msg->data == "ExportDataOK") {
@@ -140,7 +172,6 @@ void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
             mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
         }
 
-
         trackerControlPublish("Init");
     }
 }
@@ -149,6 +180,7 @@ void AnimationRender::getTestParameters()
 {
     mpNodeHandle->param<bool>("autostart", mAutostart, false);
     mpNodeHandle->param<int>("list_length", mListLength, 100);
+    mpNodeHandle->param<std::string>("render_filename", mRenderFilename, "render");
 
     //
     mpNodeHandle->param<bool>("skip_render",         mSkipRender,        false);
@@ -179,6 +211,8 @@ void AnimationRender::getTestParameters()
 
     // Template parameters
     mpNodeHandle->param<int>("template_resize",  mResize,  100);
+    mpNodeHandle->param<double>("threshold_acceptance", mpTemplateEvaluation->mAcceptanceThreshold, 40);
+    mpNodeHandle->param<double>("threshold_gradient"  , mpTemplateEvaluation->mGradThreshold,       0.1);
 }
 
 void AnimationRender::setTemplateModelParameters()
@@ -189,16 +223,16 @@ void AnimationRender::setTemplateModelParameters()
     mTemplateParameters[0]["resize"]   = mResize;
 
     mModelParameters[0]["model_name"] = mObject;
-    mModelParameters[0]["x"]      = mInitPose.x;
-    mModelParameters[0]["y"]      = mInitPose.y;
-    mModelParameters[0]["z"]      = mInitPose.z;
-    mModelParameters[0]["ax"]     = mInitPose.ax;
-    mModelParameters[0]["ay"]     = mInitPose.ay;
-    mModelParameters[0]["az"]     = mInitPose.az;
-    mModelParameters[0]["length"] = mModelParameter1;
-    mModelParameters[0]["radius"] = mModelParameter2;
-    mModelParameters[0]["height"] = mModelParameter1;
-    mModelParameters[0]["width"]  = mModelParameter2;
+    mModelParameters[0]["x"]          = mInitPose.x;
+    mModelParameters[0]["y"]          = mInitPose.y;
+    mModelParameters[0]["z"]          = mInitPose.z;
+    mModelParameters[0]["ax"]         = mInitPose.ax;
+    mModelParameters[0]["ay"]         = mInitPose.ay;
+    mModelParameters[0]["az"]         = mInitPose.az;
+    mModelParameters[0]["length"]     = mModelParameter1;
+    mModelParameters[0]["radius"]     = mModelParameter2;
+    mModelParameters[0]["height"]     = mModelParameter1;
+    mModelParameters[0]["width"]      = mModelParameter2;
 
     // set new parameters
     mGlobalNodeHandle.setParam("/tplsearch/templates", mTemplateParameters);

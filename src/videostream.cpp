@@ -3,19 +3,26 @@
 VideoStream::VideoStream(ros::NodeHandle rosH) :
     mNodeHandle(rosH)
 {
-    mpVideoCapture = new cv::VideoCapture();
+    mpVideoCapture    = new cv::VideoCapture();
     mpImageTransport  = new image_transport::ImageTransport(rosH);
 
+    // Init publisher
     mPub = mpImageTransport->advertiseCamera("/camera", 1);
 
     mFrameID = "camera";
+}
+
+VideoStream::~VideoStream()
+{
+    delete mpVideoCapture;
+    delete mpImageTransport;
 }
 
 void VideoStream::openStream(std::string path)
 {
     mpVideoCapture->open(path);
 
-    if(!mpVideoCapture->isOpened()){
+    if( !mpVideoCapture->isOpened() ){
         ROS_ERROR_STREAM("Could not open the stream.");
         return;
     }
@@ -36,20 +43,30 @@ void VideoStream::openStream(std::string path)
 
     cam_info_msg = cam_info_manager.getCameraInfo();
 
+    // init rate
     ros::Rate r(mFPS);
+
     while (mpVideoCapture->get(CV_CAP_PROP_POS_FRAMES) != mpVideoCapture->get(CV_CAP_PROP_FRAME_COUNT)) {
+
+        // get frame
         *mpVideoCapture >> frame;
 
-        if (mPub.getNumSubscribers() > 0){
+        // only publish next frame if we have a subscriber
+        if (mPub.getNumSubscribers() > 0) {
 
             if(!frame.empty()) {
+
+                // convert frame
                 msg = cv_bridge::CvImage(header, "bgr8", frame).toImageMsg();
 
+                // if distortion model is empty publish default one
                 if (cam_info_msg.distortion_model == ""){
                     ROS_WARN_STREAM("No calibration file given, publishing a reasonable default camera info.");
                     cam_info_msg = getDefaultCameraInfoFromImage(msg);
                     cam_info_manager.setCameraInfo(cam_info_msg);
                 }
+
+                // publish frame
                 mPub.publish(*msg, cam_info_msg, ros::Time::now());
             } else {
                 ROS_ERROR_STREAM("Empty frame.");

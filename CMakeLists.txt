@@ -19,14 +19,9 @@ endif(BUILD_BLENDER_MODULE AND NOT EXISTS "/usr/lib/python3.5/site-packages/bpy.
 
 include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS} /usr/include/libxml2 src)
 
-add_executable(${PROJECT_NAME}_node src/main.cpp src/animationrender.cpp src/pythoncaller.cpp src/videostream.cpp src/imageevaluation.cpp)
+add_executable(${PROJECT_NAME}_node src/main.cpp src/animationrender.cpp src/pythoncaller.cpp src/videostream.cpp src/templateevaluation.cpp)
 
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-
-if(CATKIN_ENABLE_TESTING)
-  catkin_add_gtest(utest test/utest.cpp src/videostream.cpp)
-  target_link_libraries(utest ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-endif(CATKIN_ENABLE_TESTING)
 
 if(CATKIN_ENABLE_TESTING)
   add_rostest_gtest(videostream_test test/videostream_test.test test/videostream_test.cpp src/videostream.cpp)
@@ -39,7 +34,7 @@ if(CATKIN_ENABLE_TESTING)
 endif(CATKIN_ENABLE_TESTING)
 
 if(CATKIN_ENABLE_TESTING)
-  add_rostest_gtest(animationrender_test test/animationrender_test.test test/animationrender_test.cpp src/animationrender.cpp src/pythoncaller.cpp src/videostream.cpp src/imageevaluation.cpp)
+  add_rostest_gtest(animationrender_test test/animationrender_test.test test/animationrender_test.cpp src/animationrender.cpp src/pythoncaller.cpp src/videostream.cpp)
   target_link_libraries(animationrender_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 endif(CATKIN_ENABLE_TESTING)
 

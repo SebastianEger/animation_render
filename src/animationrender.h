@@ -8,7 +8,7 @@
 #include <ros/ros.h>
 #include <ros/package.h>
 #include "pythoncaller.h"
-#include "imageevaluation.h"
+#include "templateevaluation.h"
 #include <std_msgs/String.h>
 
 
@@ -74,7 +74,7 @@ private:
     /*!
      * \brief mTemplateEvaluation Pointer to ImageEvaluation class
      */
-    ImageEvaluation *mpTemplateEvaluation;
+    TemplateEvaluation *mpTemplateEvaluation;
 
     /*!
      * \brief controlCallback Callback function of /animation_render/control topic
@@ -182,6 +182,8 @@ private:
      * \brief mSkipImageDownload Skip download new image from image list
      */
     bool mSkipImageDownload;
+
+    std::string mRenderFilename;
 
     /*!
      * \brief mAnimation Animation name
