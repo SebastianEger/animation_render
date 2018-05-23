@@ -16,6 +16,7 @@ class VideoStream
 {
 public:
     VideoStream(ros::NodeHandle rosH);
+    ~VideoStream();
 
     /*!
      * \brief openStream Reads video file and streams it over camera topic
