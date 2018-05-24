@@ -10,7 +10,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sstream>
 #include <boost/assign/list_of.hpp>
-
+#include <pythoncaller.h>
 
 class VideoStream
 {
@@ -22,22 +22,7 @@ public:
      * \brief openStream Reads video file and streams it over camera topic
      * \param path Path of video file
      */
-    void openStream(std::string path);
-
-    /*!
-     * \brief mWidth
-     */
-    int mWidth;
-
-    /*!
-     * \brief mHeight
-     */
-    int mHeight;
-
-    /*!
-     * \brief mFPS
-     */
-    int mFPS;
+    bool openStream(std::string path, VideoOptions options);
 
 private:
     /*!
@@ -59,13 +44,6 @@ private:
      * \brief mCameraName Name of camera
      */
     std::string mCameraName;
-
-    /*!
-     * \brief getDefaultCameraInfoFromImage
-     * \param img
-     * \return
-     */
-    sensor_msgs::CameraInfo getDefaultCameraInfoFromImage(sensor_msgs::ImagePtr img);
 
     /*!
      * \brief mpImageTransport

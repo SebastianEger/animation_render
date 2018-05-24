@@ -86,6 +86,12 @@ class BlenderHandler:
     def set_fps(self, fps):
         self.scene.render.fps = fps
 
+    def set_focal_length(self, focal_length):
+        bpy.data.cameras['Camera'].lens = focal_length
+
+    def set_sensor_width(self, sensor_width):
+        bpy.data.cameras['Camera'].sensor_width = sensor_width
+
     def use_environment_light(self, b):
         self.world.light_settings.use_environment_light = b
 

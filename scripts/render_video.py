@@ -12,6 +12,8 @@ parser.add_argument("--out", nargs=1)
 parser.add_argument("--anim", nargs=1)
 parser.add_argument("--res", nargs=2)
 parser.add_argument("--fps", nargs=1)
+parser.add_argument("--focal", nargs=1)
+parser.add_argument("--sensor", nargs=1)
 a = parser.parse_args()
 
 # bpy.context.scene.cycles.device = 'GPU'
@@ -20,6 +22,15 @@ bldr_handler = BlenderHandler(a.out[0])
 bldr_handler.set_background(a.bgr_img[0])
 bldr_handler.set_fps(int(a.fps[0]))
 bldr_handler.use_environment_light(True)
+
+if(a.focal[0] is not None):
+    bldr_handler.set_focal_length(float(a.focal[0]))
+else:
+    bldr_handler.set_focal_length(35.0)
+if(a.sensor[0] is not None):
+    bldr_handler.set_sensor_width(float(a.sensor[0]))
+else:
+    bldr_handler.set_sensor_width(32.0)
 
 if int(a.res[0]) > 0 and int(a.res[1]) > 0:
     bldr_handler.set_resolution(int(a.res[0]), int(a.res[1]))

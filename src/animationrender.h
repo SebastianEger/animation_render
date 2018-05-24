@@ -11,7 +11,6 @@
 #include "templateevaluation.h"
 #include <std_msgs/String.h>
 
-
 class AnimationRender
 {
 public:
@@ -37,6 +36,7 @@ public:
 
 private:
     bool downloadTemplateImage();
+    void initNextVideo();
 
     /*!
      * \brief controlCallback Callback function of /animation_render/control topic
@@ -110,30 +110,15 @@ private:
      */
     Pose mInitPose;
 
-    /*!
-     * \brief mFrames Frames to render
-     */
-    int mFrames;
-
-    /*!
-     * \brief mFPS Frames per second of render video
-     */
-    int mFPS;
-
-    /*!
-     * \brief mWidth Render video width
-     */
-    int mWidth;
-
-    /*!
-     * \brief mHeight Render video height
-     */
-    int mHeight;
+    VideoOptions mVideoOptions;
 
     /*!
      * \brief mListLength Length of image lists
      */
     int mListLength;
+
+    int mBackgroundListLength;
+    int mTemplateListLength;
 
     /*!
      * \brief mTemplateMinWidth Minimal width of template image
@@ -184,6 +169,9 @@ private:
      * \brief mSkipImageDownload Skip download new image from image list
      */
     bool mSkipImageDownload;
+
+    bool mSkipTemplateDownload;
+    bool mSkipBackgroundDownload;
 
     std::string mRenderFilename;
 

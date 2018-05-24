@@ -5,18 +5,20 @@ PythonCaller::PythonCaller(ros::NodeHandle *nh) :
 {
     mPkgPath = ros::package::getPath("animation_render");
     mPython3 = "python3 ";
-    mPython = "python ";
+    mPython  = "python ";
 }
 
-void PythonCaller::renderVideo(std::string filename, int frames, int fps, std::string object, std::string animation, int res_x, int res_y, double mp1, double mp2, double mp3)
+void PythonCaller::renderVideo(std::string filename, VideoOptions video_options, std::string object, std::string animation, double mp1, double mp2, double mp3)
 {
     std::string py_file        = "render_video.py";
-    std::string opt_frames     = " --frames " + std::to_string(frames);
-    std::string opt_fps        = " --fps " + std::to_string(fps);
-    std::string opt_object     = " --obj " + object;
-    std::string opt_animation  = " --anim " + animation;
-    std::string opt_resolution = " --res " + std::to_string(res_x) + " " + std::to_string(res_y);
-    std::string opt_size       = " --mp " +  std::to_string(mp1) + " " +  std::to_string(mp2) + " " +  std::to_string(mp3);
+    std::string opt_frames     = " --frames " + std::to_string(video_options.frames);
+    std::string opt_fps        = " --fps "    + std::to_string(video_options.fps);
+    std::string opt_object     = " --obj "    + object;
+    std::string opt_animation  = " --anim "   + animation;
+    std::string opt_resolution = " --res "    + std::to_string(video_options.width) + " " + std::to_string(video_options.height);
+    std::string opt_size       = " --mp "     + std::to_string(mp1) + " " +  std::to_string(mp2) + " " +  std::to_string(mp3);
+    std::string opt_sensor     = " --sensor " + std::to_string(video_options.sensor_width);
+    std::string opt_focal      = " --focal "  + std::to_string(video_options.focal_length);
 
     // DO NOT CHANGE
     std::string tpl_img = " --tpl_img " + mPkgPath + "/img/template_image.jpg";
@@ -31,6 +33,8 @@ void PythonCaller::renderVideo(std::string filename, int frames, int fps, std::s
                    + opt_animation
                    + opt_resolution
                    + opt_size
+                   + opt_focal
+                   + opt_sensor
                    + tpl_img
                    + bgr_img
                    + output);
@@ -38,10 +42,10 @@ void PythonCaller::renderVideo(std::string filename, int frames, int fps, std::s
 
 void PythonCaller::getTemplateImageList(int length, int min_height, int min_width, std::string keywords)
 {
-    std::string py_file = "generate_image_list.py";
-    std::string opt_length = " --length " + std::to_string(length);
-    std::string opt_min_size = " --size " + std::to_string(min_width) + " " + std::to_string(min_height);
-    std::string path = " --path " + mPkgPath + "/img/template_image_list.txt";
+    std::string py_file      = "generate_image_list.py";
+    std::string opt_length   = " --length " + std::to_string(length);
+    std::string opt_min_size = " --size "   + std::to_string(min_width) + " " + std::to_string(min_height);
+    std::string path         = " --path "   + mPkgPath + "/img/template_image_list.txt";
 
     execute_script(py_file + opt_length + opt_min_size + path + " --keywords " + keywords);
 }
