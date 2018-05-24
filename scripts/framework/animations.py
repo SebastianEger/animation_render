@@ -40,30 +40,6 @@ class Example(Animation):
         blender_object.keyframe_insert("location", 1)
         blender_object.keyframe_insert("location", int(frames/5))
 
-
-    @staticmethod
-    def get_start_position():
-        return 0, 0, 0
-
-    @staticmethod
-    def get_start_rotation():
-        return 0, 0, 0
-
-
-class TestAnimation(Animation):
-
-    def __init__(self, bdr_handler, blender_object, frames):
-        Animation.__init__(self, bdr_handler, blender_object, frames)
-
-    def _add_keyframes(self, scene, blender_object, frames):
-        # Init location and rotation
-        blender_object.set_location((0, 0, 0))
-        blender_object.set_rotation((0, 0, 0))
-
-        # Initial Time
-        blender_object.keyframe_insert("location", 1)
-        blender_object.keyframe_insert("location", int(frames/5))
-
     @staticmethod
     def get_start_position():
         return 0, 0, 0
@@ -119,6 +95,55 @@ class RotationX(Animation):
     @staticmethod
     def get_start_rotation():
         return 0, 0, 0
+
+
+class RotationX(Animation):
+
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_location((0, 0, -0.15))
+        blender_object.keyframe_insert("rotation_euler", 1)
+        # init time
+        blender_object.keyframe_insert("rotation_euler", int(frames/10))
+
+        blender_object.set_rotation((2*math.pi, 0, 0))
+
+        blender_object.keyframe_insert("rotation_euler", int(frames))
+
+    @staticmethod
+    def get_start_position():
+        return 0, 0, -0.15
+
+    @staticmethod
+    def get_start_rotation():
+        return 0, 0, 0
+
+
+class RotationY(Animation):
+
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_location( (0, 0, -0.15) )
+        blender_object.set_rotation( (0, -math.pi/4, 0) )
+        blender_object.keyframe_insert("rotation_euler", 1)
+        # init time
+        blender_object.keyframe_insert("rotation_euler", int(frames/10))
+
+        blender_object.set_rotation((0, math.pi/4, 0))
+
+        blender_object.keyframe_insert("rotation_euler", int(frames))
+
+    @staticmethod
+    def get_start_position():
+        return 0, 0, -0.15
+
+    @staticmethod
+    def get_start_rotation():
+        return 0, math.pi/4, 0
 
 
 class RotationXZ(Animation):

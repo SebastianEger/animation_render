@@ -10,6 +10,7 @@
 #include "pythoncaller.h"
 #include "templateevaluation.h"
 #include <std_msgs/String.h>
+#include <boost/filesystem.hpp>
 
 class AnimationRender
 {
@@ -176,6 +177,9 @@ private:
     std::string mRenderFilename;
 
     std::string mTemplateFilename;
+
+    std::string mPathVideos;
+    std::string mPathTemplates;
 
     /*!
      * \brief mAnimation Animation name

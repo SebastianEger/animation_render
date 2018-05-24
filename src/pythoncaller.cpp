@@ -23,8 +23,7 @@ void PythonCaller::renderVideo(std::string filename, VideoOptions video_options,
     // DO NOT CHANGE
     std::string tpl_img = " --tpl_img " + mPkgPath + "/img/template_image.jpg";
     std::string bgr_img = " --bgr_img " + mPkgPath + "/img/background_image.jpg";
-    std::string output  = " --out "
-            + mPkgPath + "/render/" + filename + ".avi";
+    std::string output  = " --out " + filename + ".avi";
 
     execute_script(py_file
                    + opt_frames
@@ -61,11 +60,11 @@ void PythonCaller::getBackgroundImageList(int length, int min_height, int min_wi
     execute_script(py_file + opt_length + opt_min_size + path + " --keywords " + keywords);
 }
 
-void PythonCaller::downloadTemplateImage(int nr)
+void PythonCaller::downloadTemplateImage(std::string filename, int nr)
 {
     std::string py_file = "download_image.py";
 
-    std::string path = " --path " + mPkgPath + "/img/template_image.jpg";
+    std::string path = " --path " + filename;
     std::string img_list = " --img_list " + mPkgPath + "/img/template_image_list.txt";
 
     execute_script(py_file + path + img_list + " --image_nr " + std::to_string(nr));

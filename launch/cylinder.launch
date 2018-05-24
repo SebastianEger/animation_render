@@ -3,9 +3,11 @@
         <param name="control_topic" value="/tplsearch/control"/>
 
         <param name="autostart" value="0"/>
-        <param name="runs" value="3"/>
 
         <param name="render_filename" value="cylinder"/>
+        <param name="videos"    value="/home/sebastian/videos/"/>
+        <param name="templates" value="/home/sebastian/templates/"/>
+
         <param name="object" value="Cylinder"/>
         <!-- Length, Height -->
         <param name="model_parameter_1" value="0.05"/>
@@ -14,10 +16,10 @@
         <!-- Faces -->
         <param name="model_parameter_3" value="200"/>
 
-        <param name="animation" value="RotationZ"/>
+        <param name="animation" value="RotationX"/>
         <!--  RotationPlaneZ RotationCylinder2 TranslationCylinder1 TranslationPlane1 -->
 
-        <param name="template_list_length"    value="10"/>
+        <param name="template_list_length"    value="100"/>
         <param name="background_list_length"  value="1"/>
         <param name="template_keywords"       value="book"/>
         <param name="background_keywords"     value="room"/>

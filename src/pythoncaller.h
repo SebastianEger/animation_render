@@ -65,7 +65,7 @@ public:
      * \brief downloadTemplateImage Download template image from list
      * \param nr Index of image
      */
-    void downloadTemplateImage(int nr);
+    void downloadTemplateImage(std::string filename, int nr);
 
     /*!
      * \brief downloadBackgroundImage Donwload background image from list
