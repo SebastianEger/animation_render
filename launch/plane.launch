@@ -5,6 +5,7 @@
         <param name="autostart" value="0"/>
         <param name="runs" value="3"/>
 
+        <param name="render_filename" value="plane"/>
         <param name="object" value="Plane"/>
         <!-- Length, Height -->
         <param name="model_parameter_1" value="0.04"/>
@@ -13,7 +14,7 @@
         <!-- Faces -->
         <param name="model_parameter_3" value="200"/>
 
-        <param name="animation" value="TestInverseCompositional"/>
+        <param name="animation" value="RotationZ"/>
         <!--  RotationPlaneZ RotationCylinder2 TranslationCylinder1 TranslationPlane1 -->
 
         <param name="list_length" value="5"/>

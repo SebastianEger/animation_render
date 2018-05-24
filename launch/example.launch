@@ -1,5 +1,11 @@
 <launch>
     <node name="animation_render" pkg="animation_render" type="animation_render_node" output="screen">
+
+        <param name="skip_image_download" value="true"/>
+        <param name="skip_ground_truth" value="true"/>
+        <param name="skip_render" value="true"/>
+        <param name="skip_img_list" value="true"/>
+
         <param name="control_topic" value="/tplsearch/control"/>
 
         <param name="autostart" value="0"/>
@@ -22,14 +28,14 @@
         <param name="render_image_width" value="500"/>
         <param name="render_image_height" value="500"/>
 
-        <param name="fps" value="10"/>
-        <param name="frames" value="200"/>
+        <param name="fps"                 value="25"/>
+        <param name="frames"              value="1000"/>
+        <param name="render_image_width"  value="400"/>
+        <param name="render_image_height" value="400"/>
+        <param name="sensor_width"        value="32.0"/>
+        <param name="focal_length"        value="35.0"/>
 
-        <param name="skip_image_download" value="true"/>
-        <param name="skip_ground_truth" value="true"/>
-        <param name="skip_render" value="true"/>
-        <param name="skip_img_list" value="true"/>
-
-        <param name="template_resize" value="200"/>
+        <param name="threshold_acceptance" value="0.1"/>
+        <param name="threshold_gradient"   value="10"/>
     </node>
 </launch>

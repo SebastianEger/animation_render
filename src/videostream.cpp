@@ -18,19 +18,19 @@ VideoStream::~VideoStream()
     delete mpImageTransport;
 }
 
-void VideoStream::openStream(std::string path)
+bool VideoStream::openStream(std::string path, VideoOptions options)
 {
     mpVideoCapture->open(path);
 
     if( !mpVideoCapture->isOpened() ){
         ROS_ERROR_STREAM("Could not open the stream.");
-        return;
+        return false;
     }
 
     // set width and height
-    if (mWidth != 0 && mHeight != 0){
-        mpVideoCapture->set(CV_CAP_PROP_FRAME_WIDTH, mWidth);
-        mpVideoCapture->set(CV_CAP_PROP_FRAME_HEIGHT, mHeight);
+    if (options.width != 0 && options.height != 0){
+        mpVideoCapture->set(CV_CAP_PROP_FRAME_WIDTH, options.width);
+        mpVideoCapture->set(CV_CAP_PROP_FRAME_HEIGHT, options.height);
     }
 
     cv::Mat frame;
@@ -41,68 +41,42 @@ void VideoStream::openStream(std::string path)
 
     camera_info_manager::CameraInfoManager cam_info_manager(mNodeHandle, mCameraName, "");
 
-    cam_info_msg = cam_info_manager.getCameraInfo();
+    cam_info_msg.height = options.height;
+    cam_info_msg.width  = options.width;
+    cam_info_msg.distortion_model = "plumb_bob";
+    cam_info_msg.D.resize(5, 0.0);
+    cam_info_msg.K = boost::assign::list_of( options.focal_length / options.sensor_width * double(options.width) ) (0.0) (double(options.width)/2.0)
+                                           ( options.focal_length / options.sensor_width * double(options.height) ) (1.0) (double(options.height)/2.0)
+                                           (0.0) (0.0) (1.0);
+    cam_info_msg.R = boost::assign::list_of (1.0) (0.0) (0.0)
+                                            (0.0) (1.0) (0.0)
+                                            (0.0) (0.0) (1.0);
+    cam_info_msg.P = boost::assign::list_of (1.0) (0.0) (double(options.width)/2.0) (0.0)
+                                            (0.0) (1.0) (double(options.height)/2.0) (0.0)
+                                            (0.0) (0.0) (1.0) (0.0);
 
     // init rate
-    ros::Rate r(mFPS);
+    ros::Rate r(options.fps);
 
     while (mpVideoCapture->get(CV_CAP_PROP_POS_FRAMES) != mpVideoCapture->get(CV_CAP_PROP_FRAME_COUNT)) {
-
         // get frame
         *mpVideoCapture >> frame;
-
         // only publish next frame if we have a subscriber
         if (mPub.getNumSubscribers() > 0) {
-
             if(!frame.empty()) {
-
                 // convert frame
                 msg = cv_bridge::CvImage(header, "bgr8", frame).toImageMsg();
-
-                // if distortion model is empty publish default one
-                if (cam_info_msg.distortion_model == ""){
-                    ROS_WARN_STREAM("No calibration file given, publishing a reasonable default camera info.");
-                    cam_info_msg = getDefaultCameraInfoFromImage(msg);
-                    cam_info_manager.setCameraInfo(cam_info_msg);
-                }
-
-                // publish frame
+                cam_info_msg.header.frame_id = msg->header.frame_id;
+                cam_info_manager.setCameraInfo(cam_info_msg);
                 mPub.publish(*msg, cam_info_msg, ros::Time::now());
             } else {
                 ROS_ERROR_STREAM("Empty frame.");
-                return;
+                return false;
             }
-
             ros::spinOnce();
         }
         r.sleep();
     }
+    return true;
 }
 
-sensor_msgs::CameraInfo VideoStream::getDefaultCameraInfoFromImage(sensor_msgs::ImagePtr img)
-{
-    sensor_msgs::CameraInfo cam_info_msg;
-    cam_info_msg.header.frame_id = img->header.frame_id;
-    // Fill image size
-    cam_info_msg.height = img->height;
-    cam_info_msg.width = img->width;
-    ROS_INFO_STREAM("The image width is: " << img->width);
-    ROS_INFO_STREAM("The image height is: " << img->height);
-    // Add the most common distortion model as sensor_msgs/CameraInfo says
-    cam_info_msg.distortion_model = "plumb_bob";
-    // Don't let distorsion matrix be empty
-    cam_info_msg.D.resize(5, 0.0);
-    // Give a reasonable default intrinsic camera matrix
-    cam_info_msg.K = boost::assign::list_of(1.0) (0.0) (img->width/2.0)
-                                           (0.0) (1.0) (img->height/2.0)
-                                           (0.0) (0.0) (1.0);
-    // Give a reasonable default rectification matrix
-    cam_info_msg.R = boost::assign::list_of (1.0) (0.0) (0.0)
-                                            (0.0) (1.0) (0.0)
-                                            (0.0) (0.0) (1.0);
-    // Give a reasonable default projection matrix
-    cam_info_msg.P = boost::assign::list_of (1.0) (0.0) (img->width/2.0) (0.0)
-                                            (0.0) (1.0) (img->height/2.0) (0.0)
-                                            (0.0) (0.0) (1.0) (0.0);
-    return cam_info_msg;
-}
