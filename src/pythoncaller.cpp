@@ -8,7 +8,7 @@ PythonCaller::PythonCaller(ros::NodeHandle *nh) :
     mPython  = "python ";
 }
 
-void PythonCaller::renderVideo(std::string filename, VideoOptions video_options, std::string object, std::string animation, double mp1, double mp2, double mp3)
+void PythonCaller::renderVideo(std::string video_name, std::string template_name, VideoOptions video_options, std::string object, std::string animation, double mp1, double mp2, double mp3)
 {
     std::string py_file        = "render_video.py";
     std::string opt_frames     = " --frames " + std::to_string(video_options.frames);
@@ -21,9 +21,9 @@ void PythonCaller::renderVideo(std::string filename, VideoOptions video_options,
     std::string opt_focal      = " --focal "  + std::to_string(video_options.focal_length);
 
     // DO NOT CHANGE
-    std::string tpl_img = " --tpl_img " + mPkgPath + "/img/template_image.jpg";
+    std::string tpl_img = " --tpl_img " + template_name + ".jpg";
     std::string bgr_img = " --bgr_img " + mPkgPath + "/img/background_image.jpg";
-    std::string output  = " --out " + filename + ".avi";
+    std::string output  = " --out " + video_name + ".avi";
 
     execute_script(py_file
                    + opt_frames
@@ -64,7 +64,7 @@ void PythonCaller::downloadTemplateImage(std::string filename, int nr)
 {
     std::string py_file = "download_image.py";
 
-    std::string path = " --path " + filename;
+    std::string path = " --path " + filename + ".jpg";
     std::string img_list = " --img_list " + mPkgPath + "/img/template_image_list.txt";
 
     execute_script(py_file + path + img_list + " --image_nr " + std::to_string(nr));

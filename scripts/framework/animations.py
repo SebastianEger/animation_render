@@ -176,17 +176,12 @@ class TranslationZ(Animation):
         Animation.__init__(self, bdr_handler, blender_object, frames)
 
     def _add_keyframes(self, scene, blender_object, frames):
-        blender_object.set_location((0, 0, -0.15))
-
-        blender_object.keyframe_insert("location", 1)
-        # Init time
-        blender_object.keyframe_insert("location", int(frames/10))
-
         blender_object.set_location((0, 0, -0.10))
 
-        blender_object.keyframe_insert("location", int(frames/2))
+        blender_object.keyframe_insert("location", 1)
+        blender_object.keyframe_insert("location", int(frames/20))
 
-        blender_object.set_location((0, 0, -0.30))
+        blender_object.set_location((0, 0, -0.40))
 
         blender_object.keyframe_insert("location", int(frames))
 
@@ -194,6 +189,28 @@ class TranslationZ(Animation):
     def get_start_position():
         return 0, 0, -0.15
 
+
+class RotationXTranslationZ(Animation):
+
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_location((0, 0, -0.10))
+
+        blender_object.keyframe_insert("location", 1)
+        blender_object.keyframe_insert("rotation_euler", 1)
+        blender_object.keyframe_insert("location", int(frames/20))
+        blender_object.keyframe_insert("rotation_euler", int(frames/20))
+
+        blender_object.set_location((0, 0, -0.40))
+        blender_object.set_rotation((2*math.pi, 0, 0))
+        blender_object.keyframe_insert("location", int(frames))
+        blender_object.keyframe_insert("rotation_euler", int(frames))
+
+    @staticmethod
+    def get_start_position():
+        return 0, 0, -0.10
 
 
 class RotationCylinder1(Animation):
