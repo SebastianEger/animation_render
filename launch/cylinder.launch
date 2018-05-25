@@ -16,8 +16,12 @@
         <!-- Faces -->
         <param name="model_parameter_3" value="200"/>
 
-        <param name="animation" value="RotationX"/>
-        <!--  RotationPlaneZ RotationCylinder2 TranslationCylinder1 TranslationPlane1 -->
+        <!--
+        RotationX RotationY RotationZ
+        TranslationZ
+        -->
+        <param name="animation" value="RotationY"/>
+
 
         <param name="template_list_length"    value="100"/>
         <param name="background_list_length"  value="1"/>

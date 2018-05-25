@@ -83,9 +83,13 @@ void AnimationRender::start()
     if(!mSkipTemplateDownload) downloadTemplateImage();
     if(!mSkipBackgroundDownload) mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
     // Create template and model parameters
-    setTemplateModelParameters();
-    // Send Init command to tracker
-    trackerControlPublish("Init");
+    if(boost::filesystem::exists(mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID) + ".jpg")) {
+        setTemplateModelParameters();
+        // Send Init command to tracker
+        trackerControlPublish("Init");
+    } else {
+        initNextVideo();
+    }
 }
 
 bool AnimationRender::downloadTemplateImage()
@@ -93,7 +97,7 @@ bool AnimationRender::downloadTemplateImage()
     if(mCurrentTemplateImgID == mTemplateListLength) {
         return false;
     }
-    std::string templateFileName = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID) + ".jpg";
+    std::string templateFileName = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
     mpPyCaller->downloadTemplateImage(templateFileName, mCurrentTemplateImgID);
     while(!mpTemplateEvaluation->evaluate(mTemplateFilename)) {
         mCurrentTemplateImgID ++;
@@ -121,7 +125,13 @@ void AnimationRender::initNextVideo()
     std::string filename = mPathVideos + mAnimation + "/" + mRenderFilename + "_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
     if(!mSkipTemplateDownload)   mpPyCaller->downloadTemplateImage(filename, mCurrentTemplateImgID);
     if(!mSkipBackgroundDownload) mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
-    trackerControlPublish("Init");
+    if(boost::filesystem::exists(mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID) + ".jpg")) {
+        setTemplateModelParameters();
+        // Send Init command to tracker
+        trackerControlPublish("Init");
+    } else {
+        initNextVideo();
+    }
 }
 
 void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
@@ -138,8 +148,9 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         if(!downloadTemplateImage()) return;
         mpPyCaller->downloadBackgroundImage(mCurrentBackgroundImgID);
         while(true) {
-            std::string filename = mPathVideos + mAnimation + "/" + mRenderFilename + "_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
-            mpPyCaller->renderVideo(filename, mVideoOptions, mObject, mAnimation, mModelParameter1, mModelParameter2, mModelParameter3);
+            std::string video_name = mPathVideos + mAnimation + "/" + mRenderFilename + "_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
+            std::string template_name = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
+            mpPyCaller->renderVideo(video_name, template_name, mVideoOptions, mObject, mAnimation, mModelParameter1, mModelParameter2, mModelParameter3);
             mCurrentBackgroundImgID ++;
             if(mCurrentBackgroundImgID == mBackgroundListLength) {
                 mCurrentBackgroundImgID = 0;
@@ -195,7 +206,8 @@ void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
         std::string file;
         if(!mSkipRender) {
             file = mPathVideos + mRenderFilename + ".avi";
-            mpPyCaller->renderVideo(mPathVideos + mRenderFilename, mVideoOptions, mObject, mAnimation, mModelParameter1, mModelParameter2, mModelParameter3);
+            std::string template_name = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
+            mpPyCaller->renderVideo(mPathVideos + mRenderFilename, template_name, mVideoOptions, mObject, mAnimation, mModelParameter1, mModelParameter2, mModelParameter3);
         } else {
             file = filename + ".avi";
         }
@@ -219,10 +231,10 @@ void AnimationRender::getTestParameters()
     mpNodeHandle->param<int>("template_list_length",   mTemplateListLength, 5);
 
     //
-    mpNodeHandle->param<bool>("skip_render",         mSkipRender,        false);
-    mpNodeHandle->param<bool>("skip_img_list",       mSkipImgList,       false);
-    mpNodeHandle->param<bool>("skip_ground_truth",   mSkipGroundTruth,   true);
-    mpNodeHandle->param<bool>("skip_image_download", mSkipImageDownload, false);
+    mpNodeHandle->param<bool>("skip_render",              mSkipRender,             false);
+    mpNodeHandle->param<bool>("skip_img_list",            mSkipImgList,            false);
+    mpNodeHandle->param<bool>("skip_ground_truth",        mSkipGroundTruth,        false);
+    mpNodeHandle->param<bool>("skip_template_download",   mSkipTemplateDownload,   false);
     mpNodeHandle->param<bool>("skip_background_download", mSkipBackgroundDownload, false);
 
     // Video parameters
