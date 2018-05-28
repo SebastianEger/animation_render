@@ -41,7 +41,10 @@ template_object = template_class(a.mp[0], a.mp[1], a.mp[2], image=a.tpl_img[0])
 
 # Add animation
 animation_class = getattr(importlib.import_module("framework.animations"), a.anim[0])
-animation_class(bldr_handler, template_object, int(a.frames[0]))
+animation = animation_class(bldr_handler, template_object, int(a.frames[0]))
+
+# Set interpolation
+bldr_handler.set_interpolation("QUAD")
 
 # Render
 bldr_handler.animation_and_save()

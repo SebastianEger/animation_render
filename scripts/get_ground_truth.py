@@ -16,6 +16,8 @@ object = Plane(0.02, 0.02, 0)
 animation_class = getattr(importlib.import_module("framework.animations"), a.anim[0])
 animation_class(bdr_handler, object, int(a.frames[0]))
 
+bdr_handler.set_interpolation("QUAD")
+
 posFile = open(a.path[0] + '/pos', 'w')
 rotFile = open(a.path[0] + '/rot', 'w')
 
