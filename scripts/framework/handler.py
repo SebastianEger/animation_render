@@ -92,6 +92,14 @@ class BlenderHandler:
     def set_sensor_width(self, sensor_width):
         bpy.data.cameras['Camera'].sensor_width = sensor_width
 
+    def set_interpolation(self, interpol):
+        actions = bpy.data.actions
+        for action in actions:
+            fcurves = action.fcurves
+            for fcurve in fcurves:
+                for kf in fcurve.keyframe_points:
+                    kf.interpolation = interpol
+
     def use_environment_light(self, b):
         self.world.light_settings.use_environment_light = b
 

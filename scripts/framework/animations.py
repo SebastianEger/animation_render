@@ -5,7 +5,10 @@ Contains the base Animation class and all animations.
 """
 class Animation:
 
+    obj = None
+
     def __init__(self, bdr_handler, blender_object, frames):
+        self.obj = blender_object
         bdr_handler.scene.render.image_settings.file_format = 'AVI_JPEG'
         self._add_keyframes(bdr_handler.scene, blender_object, frames)
         bdr_handler.scene.frame_start = 1
@@ -106,7 +109,7 @@ class RotationX(Animation):
         blender_object.set_location((0, 0, -0.15))
         blender_object.keyframe_insert("rotation_euler", 1)
         # init time
-        blender_object.keyframe_insert("rotation_euler", int(frames/10))
+        # blender_object.keyframe_insert("rotation_euler", int(frames/10))
 
         blender_object.set_rotation((2*math.pi, 0, 0))
 

@@ -5,8 +5,8 @@
         <param name="autostart" value="0"/>
 
         <param name="render_filename" value="cylinder"/>
-        <param name="videos"    value="/home/sebastian/videos/"/>
-        <param name="templates" value="/home/sebastian/templates/"/>
+        <param name="videos"    value="/home/sebastian/animation_render/videos/"/>
+        <param name="templates" value="/home/sebastian/animation_render/templates/"/>
 
         <param name="object" value="Cylinder"/>
         <!-- Length, Height -->
@@ -20,8 +20,7 @@
         RotationX RotationY RotationZ
         TranslationZ
         -->
-        <param name="animation" value="RotationY"/>
-
+        <param name="animation" value="RotationX"/>
 
         <param name="template_list_length"    value="100"/>
         <param name="background_list_length"  value="1"/>
@@ -37,7 +36,7 @@
         <param name="skip_img_list"            value="true"/>
 
         <param name="template_resize" value="100"/>
-        <param name="threshold_acceptance" value="0.1"/>
+        <param name="threshold_acceptance" value="0.2"/>
         <param name="threshold_gradient"   value="30"/>
     </node>
 </launch>
