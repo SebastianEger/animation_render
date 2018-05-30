@@ -111,7 +111,7 @@ class RotationX(Animation):
         # init time
         # blender_object.keyframe_insert("rotation_euler", int(frames/10))
 
-        blender_object.set_rotation((2*math.pi, 0, 0))
+        blender_object.set_rotation((4*math.pi, 0, 0))
 
         blender_object.keyframe_insert("rotation_euler", int(frames))
 

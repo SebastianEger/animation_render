@@ -24,23 +24,25 @@ photos_list = list()
 
 iteration = 0
 for photo in photos_gen:
-    # Check photo properties
-    iteration = iteration + 1
-    if photo.get('url_c') is None \
-            or int(photo.get('height_c')) < int(args.size[0]) \
-            or int(photo.get('width_c'))  < int(args.size[1]):
-            # or int(photo.get('height_c')) != int(photo.get('width_c')):
-        print(str(iteration) + " - Photo not usable.")
-        continue
-    elif len(photos_list) < int(args.length[0]):
-        new_url = photo.get('url_c') + "\n"
-
-        if new_url not in photos_list:
-            photos_list.append(new_url)
-            print(str(iteration) + " - New photo added to list. Photos added to list: " + str(len(photos_list)) )
+    if(len(photos_list) < int(args.length[0])):
+        # Check photo properties
+        iteration = iteration + 1
+        if photo.get('url_c') is None \
+                or int(photo.get('height_c')) < int(args.size[0]) \
+                or int(photo.get('width_c'))  < int(args.size[1]):
+                # or int(photo.get('height_c')) != int(photo.get('width_c')):
+            print(str(iteration) + " - Photo not usable.")
+            continue
         else:
-            print(str(iteration) + " - Photo already in list")
+            new_url = photo.get('url_c') + "\n"
+
+            if new_url not in photos_list:
+                photos_list.append(new_url)
+                print(str(iteration) + " - New photo added to list. Photos added to list: " + str(len(photos_list)) )
+            else:
+                print(str(iteration) + " - Photo already in list")
     else:
+        print("List created.")
         break
 
 # Write list to file
