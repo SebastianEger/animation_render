@@ -1,4 +1,4 @@
-import argparse, importlib, bpy
+import argparse, importlib, bpy, math
 
 from framework.handler import BlenderHandler
 from framework.objects import Plane
@@ -28,6 +28,32 @@ for frame in range(1, int(a.frames[0])+1):
     posFile.write(str(bpy.data.objects["Plane"].location.y) + " ")
     posFile.write(str(bpy.data.objects["Plane"].location.z) + "\n")
 
-    rotFile.write(str(bpy.data.objects["Plane"].rotation_euler.x) + " ")
-    rotFile.write(str(bpy.data.objects["Plane"].rotation_euler.y) + " ")
-    rotFile.write(str(bpy.data.objects["Plane"].rotation_euler.z) + "\n")
+
+    ax = bpy.data.objects["Plane"].rotation_euler.x
+    if(ax > math.pi):
+        while(ax > math.pi):
+            ax = ax - 2*math.pi
+    elif(ax < -math.pi):
+        while(ax < -math.pi):
+            ax = ax + 2*math.pi
+
+    ay = bpy.data.objects["Plane"].rotation_euler.y
+    if(ay > math.pi):
+        while(ay > math.pi):
+            ay = ay - 2*math.pi
+    elif(ay < -math.pi):
+        while(ay < -math.pi):
+            ay = ay + 2*math.pi
+
+    az = bpy.data.objects["Plane"].rotation_euler.z
+    if(az > math.pi):
+        while(az > math.pi):
+            az = az - 2*math.pi
+    elif(az < -math.pi):
+        while(az < -math.pi):
+            az = az + 2*math.pi
+
+    # rotFile.write(str(bpy.data.objects["Plane"].rotation_euler.x) + " ")
+    rotFile.write(str(ax) + " ")
+    rotFile.write(str(ay) + " ")
+    rotFile.write(str(az) + "\n")
