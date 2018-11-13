@@ -79,4 +79,3 @@ bool VideoStream::openStream(std::string path, VideoOptions options)
     }
     return true;
 }
-
