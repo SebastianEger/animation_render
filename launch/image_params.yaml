@@ -1,0 +1,5 @@
+template_min_width:    200
+template_min_height:   200
+background_min_width:  200
+background_min_height: 200
+only_square: false

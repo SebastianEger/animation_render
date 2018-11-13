@@ -1,0 +1,6 @@
+fps: 25
+frames: 300
+render_image_width:  500
+render_image_height: 500
+sensor_width: 32.0
+focal_length: 20.0

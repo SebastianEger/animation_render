@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="animation_render" type="animation_render_node" name="animation_render" />
+  <test test-name="pythoncaller_test" pkg="animation_render" type="pythoncaller_test" />
+</launch>

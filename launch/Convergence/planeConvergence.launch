@@ -1,0 +1,55 @@
+<launch>
+    <node name="animation_render" pkg="animation_render" type="animation_render_node" output="screen">
+        <param name="control_topic" value="/mdltracker/control"/>
+
+        <param name="autostart" value="false"/>
+
+        <param name="render_filename" value="cylinder"/>
+        <param name="videos"          value="/home/sebastian/animation_render/plane/videos/"/>
+        <param name="templates"       value="/home/sebastian/animation_render/plane/templates/"/>
+        <param name="backgrounds"     value="/home/sebastian/animation_render/plane/backgrounds/"/>
+
+        <param name="use_template_folder" value="true"/>
+        <param name="template_folder" value="/home/sebastian/animation_render/nomotion_templates"/>
+
+        <param name="use_background_folder" value="true"/>
+        <param name="background_folder" value="/home/sebastian/animation_render/backgrounds"/>
+
+        <param name="object" value="Plane"/>
+        <!-- Length, Height -->
+        <param name="model_parameter_1" value="0.2"/>
+        <!-- Radius, Width -->
+        <param name="model_parameter_2" value="0.2"/>
+        <!-- Faces -->
+        <param name="model_parameter_3" value="1"/>
+
+        <!--
+        RotationX RotationY RotationZ
+        TranslationXY
+        -->
+        <param name="animation" value="Convergence"/>
+
+        <param name="init_R_range" value="0"/>
+        <param name="init_T_range" value="0"/>
+
+        <param name="template_list_length"    value="50"/>
+        <param name="background_list_length"  value="10"/>
+        <param name="template_keywords"       value="abstract"/>
+        <param name="background_keywords"     value="city tree"/>
+
+        <rosparam command="load" file="$(find animation_render)/launch/video_params_iteration.yaml" />
+        <rosparam command="load" file="$(find animation_render)/launch/image_params.yaml" />
+
+        <param name="skip_template_download"   value="true"/>
+        <param name="skip_background_download" value="true"/>
+        <param name="skip_ground_truth"        value="true"/>
+        <param name="skip_render"              value="true"/>
+        <param name="skip_img_list"            value="true"/>
+
+        <param name="template_resize" value="100"/>
+        <param name="threshold_acceptance" value="0"/>
+        <param name="threshold_gradient"   value="0"/>
+
+        <param name="repeat_with_noise" value="true"/>
+    </node>
+</launch>
