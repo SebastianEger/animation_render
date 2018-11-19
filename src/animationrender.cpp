@@ -33,25 +33,9 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     // Get parameters
     getTestParameters();
 
-    std::string videoFolderPath      = mPathVideos    + mAnimation;
-    std::string templateFolderPath   = mPathTemplates + mAnimation;
-    std::string backgroundFolderPath = mPathBackgrounds + mAnimation;
-
-
+    std::string videoFolderPath      = mPathVideos    + "/" + mAnimation;
     boost::filesystem::path videoDir(videoFolderPath.c_str());
-    boost::filesystem::path templateDir(templateFolderPath.c_str());
-    boost::filesystem::path backgroundDir(backgroundFolderPath.c_str());
-
     boost::filesystem::create_directories(videoDir);
-    boost::filesystem::create_directories(templateDir);
-    boost::filesystem::create_directories(backgroundDir);
-
-    // Create ground truth data
-    if(!mSkipGroundTruth) {
-        std::string dataPath;
-        mGlobalNodeHandle.param<std::string>("/tplsearch/data_path", dataPath, "~/tplsearch_data");
-        mpPyCaller->getGroundTruthData(mAnimation, mVideoOptions.frames, dataPath + "/ground_truth");
-    }
 
     // Init template parameters
     mTemplateParameters    = XmlRpc::XmlRpcValue();
@@ -60,8 +44,6 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     // Init model parameters
     mModelParameters    = XmlRpc::XmlRpcValue();
     mModelParameters[0] = XmlRpc::XmlRpcValue();
-
-    mpNodeHandle->param<bool>("autostart", mAutostart, false);
 }
 
 AnimationRender::~AnimationRender()
@@ -71,38 +53,13 @@ AnimationRender::~AnimationRender()
     delete mpTemplateEvaluation;
 }
 
-void AnimationRender::start()
-{
-    mpPyCaller->getInitPose(mAnimation, mInitPose);
-    // Init img ids
-    mCurrentTemplateImgID   = -1;
-    mCurrentBackgroundImgID = 0;
-    // Create image list for background and templates
-    /*
-    if(!mSkipImgList) {
-        mpPyCaller->getTemplateImageList(mTemplateListLength, mTemplateMinHeight, mTemplateMinWidth, mTemplateKeywords);
-        mpPyCaller->getBackgroundImageList(mBackgroundListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
-    }
-    */
-    initNextVideo();
-}
-
 bool AnimationRender::downloadTemplateImage()
 {
     if(mCurrentTemplateImgID == mTemplateListLength) {
         return false;
     }
-    std::string templateFileName = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
+    std::string templateFileName = mTemplateFolder + "/template_" + std::to_string(mCurrentTemplateImgID);
     mpPyCaller->downloadTemplateImage(templateFileName, mCurrentTemplateImgID);
-
-    while(!mpTemplateEvaluation->evaluate(templateFileName + ".jpg") ) {
-        mCurrentTemplateImgID ++;
-        if(mCurrentTemplateImgID == mTemplateListLength) {
-            return false;
-        }
-        templateFileName = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
-        mpPyCaller->downloadTemplateImage(templateFileName, mCurrentTemplateImgID);
-    }
     return true;
 }
 
@@ -111,30 +68,31 @@ bool AnimationRender::downloadBackgroundImage()
     if(mCurrentBackgroundImgID == mBackgroundListLength) {
         return false;
     }
-    std::string templateFileName = mPathBackgrounds + mAnimation + "/" + mRenderFilename + "_background_" + std::to_string(mCurrentBackgroundImgID);
+    std::string templateFileName = mBackgroundFolder + "/background_" + std::to_string(mCurrentBackgroundImgID);
     mpPyCaller->downloadBackgroundImage(templateFileName, mCurrentBackgroundImgID);
     return true;
 }
 
+void AnimationRender::start()
+{
+    mpPyCaller->getInitPose(mAnimation, mInitPose);
+    // Init img ids
+    mCurrentTemplateImgID   = -1;
+    mCurrentBackgroundImgID = 0;
+    initNextVideo();
+}
+
 void AnimationRender::initNextVideo()
 {
-    mCurrentBackgroundImgID ++;
-    if(mCurrentBackgroundImgID == mBackgroundListLength) {
-        mCurrentTemplateImgID ++;
-        mCurrentBackgroundImgID = 0;
-    }
+    mCurrentTemplateImgID++;
     if(mCurrentTemplateImgID == mTemplateListLength) {
-        // trackerControlPublish("Shutdown");
-        // ros::shutdown();
-        return;
+        mCurrentTemplateImgID = 0;
+        mCurrentBackgroundImgID++;
+        if(mCurrentBackgroundImgID == mBackgroundListLength) {
+            return;
+        }
     }
-
-    // Download template image if skip is false
-    std::string filename = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
-    if(!mSkipTemplateDownload) mpPyCaller->downloadTemplateImage(filename, mCurrentTemplateImgID);
-
-    if(mUseTemplateFolder) filename = mTemplateFolder + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
-
+    std::string filename = mTemplateFolder + "/template_" + std::to_string(mCurrentTemplateImgID);
     // check if template exists
     if(boost::filesystem::exists(filename + ".jpg")) {
         if(mpTemplateEvaluation->evaluate(filename + ".jpg")) {
@@ -156,37 +114,21 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         start();
     }
     if(msg->data == "RenderVideos") {
-        /*
-        mpPyCaller->getTemplateImageList(mTemplateListLength, mTemplateMinHeight, mTemplateMinWidth, mTemplateKeywords);
-        mpPyCaller->getBackgroundImageList(mBackgroundListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
-        */
         mCurrentTemplateImgID   = 0;
         mCurrentBackgroundImgID = 0;
-        if(!mSkipTemplateDownload) {
-            if(!downloadTemplateImage()) return;
-        }
+
         while(true) {
-            std::string video_name = mPathVideos + mAnimation + "/" + mRenderFilename + "_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
+            std::string video_name = mPathVideos + "/" + mAnimation + "/" + mObject + "/video_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
+            std::string template_name =   mTemplateFolder + "/template_" + std::to_string(mCurrentTemplateImgID);
+            std::string background_name = mBackgroundFolder + "/background_" + std::to_string(mCurrentBackgroundImgID);
 
-            std::string template_name;
-            if(!mSkipTemplateDownload) template_name = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
-            else template_name = mTemplateFolder + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
-
-            std::string background_name;
-            if(mUseTemplateFolder) background_name = mBackgroundFolder + "/" + mRenderFilename + "_background_" + std::to_string(mCurrentBackgroundImgID);
-
+            if(mUseWhiteBackground) background_name = "White";
             mpPyCaller->renderVideo(video_name, template_name, background_name, mVideoOptions, mObject, mAnimation, mModelParameter1, mModelParameter2, mModelParameter3);
             mCurrentBackgroundImgID ++;
             if(mCurrentBackgroundImgID == mBackgroundListLength) {
                 mCurrentBackgroundImgID = 0;
                 mCurrentTemplateImgID ++;
                 if(mCurrentTemplateImgID == mTemplateListLength) break;
-
-                if(mUseBackgroundFolder)
-
-                    if(!mSkipTemplateDownload) {
-                        if(!downloadTemplateImage()) break;
-                    }
             }
         }
     }
@@ -198,9 +140,6 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         mCurrentTemplateImgID = 0;
         while(downloadTemplateImage()) {
             mCurrentTemplateImgID ++;
-            if(mCurrentTemplateImgID == mTemplateListLength) {
-                break;
-            }
         }
     }
     if(msg->data == "DownloadBackgrounds") {
@@ -222,12 +161,6 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         mpTemplateEvaluation->evaluate(path, acc_x, acc_y);
         ROS_INFO_STREAM("Acceptance: x: " << std::to_string(acc_x) << " y: " << std::to_string(acc_y));
     }
-    if(msg->data == "DownloadAllTemplates") {
-        mCurrentTemplateImgID = 0;
-        while(downloadTemplateImage()) {
-            mCurrentTemplateImgID++;
-        }
-    }
     if(msg->data == "ExportGroundTruth") {
         mpPyCaller->getGroundTruthData(mAnimation, mVideoOptions.frames,  "~/ground_truth");
     }
@@ -236,16 +169,7 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
 void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
 {
     if(msg->data == "InitOK") {
-        std::string filename = mPathVideos + mAnimation + "/" + mRenderFilename + "_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
-        std::string file;
-        if(!mSkipRender) {
-            file = mPathVideos + mRenderFilename + ".avi";
-            std::string template_name = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID);
-            std::string background_name = mPathTemplates + mAnimation + "/" + mRenderFilename + "_background_" + std::to_string(mCurrentBackgroundImgID);
-            mpPyCaller->renderVideo(mPathVideos + mRenderFilename, template_name, background_name, mVideoOptions, mObject, mAnimation, mModelParameter1, mModelParameter2, mModelParameter3);
-        } else {
-            file = filename + ".avi";
-        }
+        std::string file = mPathVideos + "/" + mAnimation + "/" + mObject + "/video_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID) + ".avi";
         if(mpVideoStream->openStream(file, mVideoOptions)) trackerControlPublish("ExportData");
         else initNextVideo();
     }
@@ -256,26 +180,15 @@ void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
 
 void AnimationRender::getTestParameters()
 {
-    mpNodeHandle->param<std::string>("render_filename", mRenderFilename, "render");
-    mpNodeHandle->param<std::string>("videos",          mPathVideos,      ros::package::getPath("animation_render") + "/render/");
-    mpNodeHandle->param<std::string>("templates",       mPathTemplates,   ros::package::getPath("animation_render") + "/img/");
-    mpNodeHandle->param<std::string>("backgrounds",      mPathBackgrounds, ros::package::getPath("animation_render") + "/img/");
-
-    mpNodeHandle->param<bool>("use_template_folder",    mUseTemplateFolder, false);
-    mpNodeHandle->param<std::string>("template_folder", mTemplateFolder, ros::package::getPath("animation_render") + "/templates/");
-
-    mpNodeHandle->param<bool>("use_background_folder",    mUseBackgroundFolder, false);
-    mpNodeHandle->param<std::string>("background_folder", mBackgroundFolder, ros::package::getPath("animation_render") + "/backgrounds/");
+    mpNodeHandle->param<std::string>("render_filename",   mRenderFilename,   "render");
+    mpNodeHandle->param<std::string>("video_folder",      mPathVideos,       ros::package::getPath("animation_render") + "/videos");
+    mpNodeHandle->param<std::string>("template_folder",   mTemplateFolder,   ros::package::getPath("animation_render") + "/templates");
+    mpNodeHandle->param<std::string>("background_folder", mBackgroundFolder, ros::package::getPath("animation_render") + "/backgrounds");
 
     mpNodeHandle->param<int>("background_list_length", mBackgroundListLength, 5);
     mpNodeHandle->param<int>("template_list_length",   mTemplateListLength, 5);
 
-    //
-    mpNodeHandle->param<bool>("skip_render",              mSkipRender,             false);
-    mpNodeHandle->param<bool>("skip_img_list",            mSkipImgList,            false);
-    mpNodeHandle->param<bool>("skip_ground_truth",        mSkipGroundTruth,        false);
-    mpNodeHandle->param<bool>("skip_template_download",   mSkipTemplateDownload,   false);
-    mpNodeHandle->param<bool>("skip_background_download", mSkipBackgroundDownload, false);
+    mpNodeHandle->param<bool>("white_background",   mUseWhiteBackground, false);
 
     // Video parameters
     mpNodeHandle->param<int>("frames",              mVideoOptions.frames, 100);
@@ -314,12 +227,7 @@ void AnimationRender::setTemplateModelParameters()
     //mpPyCaller->getInitPose(mAnimation, mInitPose);
     ROS_INFO_STREAM("Setting template "  << std::to_string(mCurrentTemplateImgID) << " and model parameters.");
 
-    if(mUseTemplateFolder) {
-        mTemplateParameters[0]["filename"] = mTemplateFolder + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID) + ".jpg";
-    } else {
-        mTemplateParameters[0]["filename"] = mPathTemplates + mAnimation + "/" + mRenderFilename + "_template_" + std::to_string(mCurrentTemplateImgID) + ".jpg";
-    }
-
+    mTemplateParameters[0]["filename"] = mTemplateFolder + "/template_" + std::to_string(mCurrentTemplateImgID) + ".jpg";
     mTemplateParameters[0]["resize"]   = mResize;
 
     std::random_device rd;  //Will be used to obtain a seed for the random number engine

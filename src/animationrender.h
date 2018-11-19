@@ -152,29 +152,6 @@ private:
      */
     XmlRpc::XmlRpcValue mModelParameters;
 
-    /*!
-     * \brief mSkipRender Skip render video step
-     */
-    bool mSkipRender;
-
-    /*!
-     * \brief mSkipImgList Skip creating new image lists
-     */
-    bool mSkipImgList;
-
-    /*!
-     * \brief mSkipGroundTruth Skip extracting ground truth data
-     */
-    bool mSkipGroundTruth;
-
-    /*!
-     * \brief mSkipImageDownload Skip download new image from image list
-     */
-    bool mSkipImageDownload;
-
-    bool mSkipTemplateDownload;
-    bool mSkipBackgroundDownload;
-
     std::string mRenderFilename;
 
     std::string mTemplateFilename;
@@ -247,6 +224,8 @@ private:
 
     double mInitRotationRange;
     double mInitTranslationRange;
+
+    bool mUseWhiteBackground;
 
     /*!
      * \brief setTemplateModelParameters
