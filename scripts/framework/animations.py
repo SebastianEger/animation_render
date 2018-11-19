@@ -587,90 +587,6 @@ class Movement4(Animation):
     def get_start_rotation():
         return 0, 0, 0
 
-class RotationXZ(Animation):
-
-    def __init__(self, bdr_handler, blender_object, frames):
-        Animation.__init__(self, bdr_handler, blender_object, frames)
-
-    def _add_keyframes(self, scene, blender_object, frames):
-        blender_object.set_location((0, 0, -0.15))
-        blender_object.set_rotation( (0, 0, 0) )
-        blender_object.keyframe_insert("rotation_euler", 1)
-        # init time
-        # blender_object.keyframe_insert("rotation_euler", int(frames/10))
-
-        blender_object.set_rotation( (2*math.pi, 0, 4*math.pi) )
-
-        blender_object.keyframe_insert("rotation_euler", int(frames))
-
-    @staticmethod
-    def get_start_position():
-        return 0, 0, -0.15
-
-    @staticmethod
-    def get_start_rotation():
-        return 0, 0, 0
-
-
-class TranslationCylinder1(Animation):
-
-    def __init__(self, bdr_handler, blender_object, frames):
-        Animation.__init__(self, bdr_handler, blender_object, frames)
-
-    def _add_keyframes(self, scene, blender_object, frames):
-        blender_object.set_location((-0.03, -0.03, -0.15))
-        blender_object.set_rotation((0, 0, 0))
-
-        blender_object.keyframe_insert("location", 1)
-        blender_object.keyframe_insert("location", int(frames/5))
-
-        blender_object.keyframe_insert("location", int(frames/4))
-
-        blender_object.set_location((0.03, -0.03, -0.15))
-
-        blender_object.keyframe_insert("location", int(frames/2))
-
-        blender_object.set_location((0.03, 0.03, -0.15))
-
-        blender_object.keyframe_insert("location", int(frames*3/4))
-
-        blender_object.set_location((-0.03, 0.03, -0.15))
-
-        blender_object.keyframe_insert("location", int(frames))
-
-    @staticmethod
-    def get_start_position():
-        return -0.03, -0.03, -0.15
-
-    @staticmethod
-    def get_start_rotation():
-        return 0, 0, 0
-
-
-class TestAdvanceFaceTracker(Animation):
-
-    def __init__(self, bdr_handler, blender_object, frames):
-        Animation.__init__(self, bdr_handler, blender_object, frames)
-
-    def _add_keyframes(self, scene, blender_object, frames):
-        blender_object.set_location((0, 0, -0.15))
-        blender_object.set_rotation((0.0, 0, 0))
-
-        blender_object.keyframe_insert("location", 1)
-        blender_object.keyframe_insert("rotation_euler", 1)
-
-        blender_object.set_rotation((0.5 , 0, 0))
-        blender_object.keyframe_insert("location", int(frames))
-        blender_object.keyframe_insert("rotation_euler", int(frames))
-
-    @staticmethod
-    def get_start_position():
-        return 0.0, 0.0, -0.15
-
-    @staticmethod
-    def get_start_rotation():
-        return 0, 0, 0
-
 class Convergence(Animation):
     def __init__(self, bdr_handler, blender_object, frames):
         Animation.__init__(self, bdr_handler, blender_object, frames)
@@ -726,6 +642,45 @@ class RenderTest(Animation):
     @staticmethod
     def get_start_position():
         return 0.0, 0.0, 0.4
+
+    @staticmethod
+    def get_start_rotation():
+        return 0.0, 0.0, 0.0
+
+
+class ForRender(Animation):
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_rotation( (0, 0, 0) )
+        blender_object.set_location( (0, 0, 1.5) )
+        blender_object.keyframe_insert("rotation_euler", 1)
+        blender_object.keyframe_insert("location", 1)
+
+        blender_object.set_rotation( (0, 0, 0) )
+        blender_object.set_location( (0, 0, 1.5) )
+        blender_object.keyframe_insert("rotation_euler", int(frames))
+        blender_object.keyframe_insert("location", int(frames))
+
+        # Noise
+        action = blender_object.obj.animation_data.action
+
+        for fcu in action.fcurves:
+            if fcu.data_path == "rotation_euler" and fcu.array_index == 0: # x
+                mod = fcu.modifiers.new("NOISE")
+                mod.strength = 4
+                mod.scale = 40
+                # mod.phase = random.uniform(0, 100)
+                mod.phase = fcu.array_index*100
+                mod.use_restricted_range = True
+                mod.frame_start = 5
+                mod.frame_end = int(frames)
+                mod.blend_in = 100
+
+    @staticmethod
+    def get_start_position():
+        return 0.0, 0.0, 1.5
 
     @staticmethod
     def get_start_rotation():

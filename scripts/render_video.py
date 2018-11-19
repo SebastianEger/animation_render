@@ -19,8 +19,10 @@ a = parser.parse_args()
 # bpy.context.scene.cycles.device = 'GPU'
 
 bldr_handler = BlenderHandler(a.out[0])
-# bldr_handler.set_background(a.bgr_img[0])
-bldr_handler.set_horizon_color((1.0, 1.0, 1.0))
+if( a.bgr_img[0] == "White.jpg"):
+    bldr_handler.set_horizon_color((1.0, 1.0, 1.0))
+else:
+    bldr_handler.set_background(a.bgr_img[0])
 bldr_handler.set_fps(int(a.fps[0]))
 bldr_handler.use_environment_light(True)
 bldr_handler.set_environment_energy(1)

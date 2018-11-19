@@ -30,7 +30,7 @@ public:
     PythonCaller(ros::NodeHandle *nh);
 
     /*!
-     * \brief renderVideo Render video
+     * \brief Render video.
      * \param frames Number frames
      * \param fps Frames per second
      * \param object Name of object: Plane, Cylinder
@@ -45,7 +45,7 @@ public:
                      VideoOptions video_options, std::string object, std::string animation, double mp1, double mp2, double mp3);
 
     /*!
-     * \brief getTemplateImageList Creates a list of template image urls
+     * \brief Creates a list of template image urls
      * \param length Length of list
      * \param min_height Minimal height of images
      * \param min_width Minimal width of images
@@ -54,7 +54,7 @@ public:
     void getTemplateImageList(int length, int min_height, int min_width, std::string keywords);
 
     /*!
-     * \brief getBackgroundImageList Creates a list of background image urls
+     * \brief Creates a list of background image urls
      * \param length Length of list
      * \param min_height Minimal height of images
      * \param min_width Minimal width of images
@@ -63,19 +63,19 @@ public:
     void getBackgroundImageList(int length, int min_height, int min_width, std::string keywords);
 
     /*!
-     * \brief downloadTemplateImage Download template image from list
+     * \brief Download template image from list
      * \param nr Index of image
      */
     void downloadTemplateImage(std::string filename, int nr);
 
     /*!
-     * \brief downloadBackgroundImage Donwload background image from list
+     * \brief Donwload background image from list
      * \param nr Index of image
      */
     void downloadBackgroundImage(std::string filename, int nr);
 
     /*!
-     * \brief getGroundTruthData Get the ground truth data of given animation
+     * \brief Get the ground truth data of given animation
      * \param animation Name of animation
      * \param frames Number of frames
      * \param path output path
@@ -83,7 +83,7 @@ public:
     void getGroundTruthData(std::string animation, int frames, std::string path);
 
     /*!
-     * \brief getInitPose Get init pose of animation
+     * \brief Get init pose of animation
      * \param animation Name of animation
      * \param x x position
      * \param y y position
@@ -107,17 +107,17 @@ private:
     std::string mPkgPath;
 
     /*!
-     * \brief mPython3 python3 command
+     * \brief Python3 command
      */
     std::string mPython3;
 
     /*!
-     * \brief mPython python command
+     * \brief Python command
      */
     std::string mPython;
 
     /*!
-     * \brief execute_script Executes python scripts
+     * \brief Executes python scripts
      * \param script name of script
      * \param version python versionn, 2 or 3
      * \return Output of executed python script
@@ -125,7 +125,7 @@ private:
     FILE* execute_script(std::string script, int version);
 
     /*!
-     * \brief execute_script Executes python script
+     * \brief Executes python script
      * \param script name of script
      */
     void execute_script(std::string script);
