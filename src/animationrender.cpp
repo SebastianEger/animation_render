@@ -202,7 +202,6 @@ void AnimationRender::responseCallback(const std_msgs::String::ConstPtr &msg)
 
 void AnimationRender::getTestParameters()
 {
-    mpNodeHandle->param<std::string>("render_filename",   mRenderFilename,   "render");
     mpNodeHandle->param<std::string>("video_folder",      mPathVideos,       ros::package::getPath("animation_render") + "/videos");
     mpNodeHandle->param<std::string>("template_folder",   mTemplateFolder,   ros::package::getPath("animation_render") + "/templates");
     mpNodeHandle->param<std::string>("background_folder", mBackgroundFolder, ros::package::getPath("animation_render") + "/backgrounds");

@@ -30,7 +30,16 @@ public:
      */
     void start();
 
+    /*!
+     * \brief Download current template image
+     * \return
+     */
     bool downloadTemplateImage();
+
+    /*!
+     * \brief Dwonload current background image
+     * \return
+     */
     bool downloadBackgroundImage();
 
 private:
@@ -108,6 +117,9 @@ private:
      */
     Pose mInitPose;
 
+    /*!
+     * \brief Video options
+     */
     VideoOptions mVideoOptions;
 
     /*!
@@ -115,7 +127,14 @@ private:
      */
     int mListLength;
 
+    /*!
+     * \brief mBackgroundListLength
+     */
     int mBackgroundListLength;
+
+    /*!
+     * \brief mTemplateListLength
+     */
     int mTemplateListLength;
 
     /*!
@@ -148,40 +167,43 @@ private:
      */
     XmlRpc::XmlRpcValue mModelParameters;
 
-    std::string mRenderFilename;
-
+    /*!
+     * \brief Path where videos are created
+     */
     std::string mPathVideos;
-    std::string mPathTemplates;
-    std::string mPathBackgrounds;
 
-    bool mUseTemplateFolder;
+    /*!
+     * \brief Folder of the templates
+     */
     std::string mTemplateFolder;
 
-    bool mUseBackgroundFolder;
+    /*!
+     * \brief Folder of the backgrounds
+     */
     std::string mBackgroundFolder;
 
     /*!
-     * \brief mAnimation Animation name
+     * \brief Animation name
      */
     std::string mAnimation;
 
     /*!
-     * \brief mObject Object name, for example: Cylinder, Plane, (Cube)
+     * \brief Object name, for example: Cylinder, Plane, (Cube)
      */
     std::string mObject;
 
     /*!
-     * \brief mTemplateKeywords Keywords for template image search
+     * \brief Keywords for template image search
      */
     std::string mTemplateKeywords;
 
     /*!
-     * \brief mBackgroundKeywords Keywords for background image search
+     * \brief Keywords for background image search
      */
     std::string mBackgroundKeywords;
 
     /*!
-     * \brief mKey Flickr Api Key
+     * \brief Flickr Api Key
      */
     std::string mKey;
 
@@ -212,13 +234,23 @@ private:
     double mModelParameter3;
 
     /*!
-     * \brief mResize
+     * \brief Size of the resized model
      */
     int mResize;
 
+    /*!
+     * \brief Range for random rotation distortion
+     */
     double mInitRotationRange;
+
+    /*!
+     * \brief Range for random translation distortion
+     */
     double mInitTranslationRange;
 
+    /*!
+     * \brief Use white background instead of background image
+     */
     bool mUseWhiteBackground;
 
     /*!
