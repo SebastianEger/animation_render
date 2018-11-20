@@ -23,13 +23,17 @@ catkin build
 In catkin workspace:
 catkin run_tests
 
-### Break down into end to end tests
-
-PointOfInterest Tests:
-
-Object Tests:
-
-Model Tests:
+## Commands
+The node can be controlled via the /animation_render/control topic.
+Commands:
+- CreateBackgroundList
+- CreateTemplateList
+- CreateLists
+- DownloadBackgrounds
+- DownloadTemplates
+- DownloadImages
+- RenderVideos
+- StartTest
 
 ## Acknowledgments
 
