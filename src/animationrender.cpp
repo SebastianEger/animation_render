@@ -34,8 +34,15 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     getTestParameters();
 
     std::string videoFolderPath      = mPathVideos    + "/" + mAnimation;
+
     boost::filesystem::path videoDir(videoFolderPath.c_str());
+    boost::filesystem::path templateDir(mTemplateFolder.c_str());
+    boost::filesystem::path backgroundDir(mBackgroundFolder.c_str());
+
+
     boost::filesystem::create_directories(videoDir);
+    boost::filesystem::create_directories(templateDir);
+    boost::filesystem::create_directories(backgroundDir);
 
     // Init template parameters
     mTemplateParameters    = XmlRpc::XmlRpcValue();
@@ -59,7 +66,7 @@ bool AnimationRender::downloadTemplateImage()
         return false;
     }
     std::string templateFileName = mTemplateFolder + "/template_" + std::to_string(mCurrentTemplateImgID);
-    mpPyCaller->downloadTemplateImage(templateFileName, mCurrentTemplateImgID);
+    mpPyCaller->downloadImage(templateFileName, mTemplateFolder + "/list.txt", mCurrentTemplateImgID);
     return true;
 }
 
@@ -68,8 +75,8 @@ bool AnimationRender::downloadBackgroundImage()
     if(mCurrentBackgroundImgID == mBackgroundListLength) {
         return false;
     }
-    std::string templateFileName = mBackgroundFolder + "/background_" + std::to_string(mCurrentBackgroundImgID);
-    mpPyCaller->downloadBackgroundImage(templateFileName, mCurrentBackgroundImgID);
+    std::string backgroundFileName = mBackgroundFolder + "/background_" + std::to_string(mCurrentBackgroundImgID);
+    mpPyCaller->downloadImage(backgroundFileName, mBackgroundFolder + "/list.txt", mCurrentBackgroundImgID);
     return true;
 }
 
@@ -133,8 +140,14 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         }
     }
     if(msg->data == "CreateLists") {
-        mpPyCaller->getTemplateImageList(mTemplateListLength, mTemplateMinHeight, mTemplateMinWidth, mTemplateKeywords);
-        mpPyCaller->getBackgroundImageList(mBackgroundListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
+        mpPyCaller->getImageList(mTemplateFolder   + "/list.txt", mTemplateListLength,   mTemplateMinHeight,   mTemplateMinWidth,   mTemplateKeywords);
+        mpPyCaller->getImageList(mBackgroundFolder + "/list.txt", mBackgroundListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
+    }
+    if(msg->data == "CreateTemplateList") {
+        mpPyCaller->getImageList(mTemplateFolder   + "/list.txt", mTemplateListLength,   mTemplateMinHeight,   mTemplateMinWidth,   mTemplateKeywords);
+    }
+    if(msg->data == "CreateBackgroundList") {
+        mpPyCaller->getImageList(mBackgroundFolder + "/list.txt", mBackgroundListLength, mBackgroundMinHeight, mBackgroundMinWidth, mBackgroundKeywords);
     }
     if(msg->data == "DownloadTemplates") {
         mCurrentTemplateImgID = 0;
@@ -143,6 +156,16 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
         }
     }
     if(msg->data == "DownloadBackgrounds") {
+        mCurrentBackgroundImgID = 0;
+        while(downloadBackgroundImage()) {
+            mCurrentBackgroundImgID++;
+        }
+    }
+    if(msg->data == "DownloadImages") {
+        mCurrentTemplateImgID = 0;
+        while(downloadTemplateImage()) {
+            mCurrentTemplateImgID ++;
+        }
         mCurrentBackgroundImgID = 0;
         while(downloadBackgroundImage()) {
             mCurrentBackgroundImgID++;

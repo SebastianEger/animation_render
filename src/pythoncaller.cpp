@@ -40,46 +40,29 @@ void PythonCaller::renderVideo(std::string video_name, std::string template_name
                    + output);
 }
 
-void PythonCaller::getTemplateImageList(int length, int min_height, int min_width, std::string keywords)
+void PythonCaller::getImageList(std::string filename, int length, int min_height, int min_width, std::string keywords)
 {
     std::string py_file      = "generate_image_list.py";
-    std::string opt_length   = " --length " + std::to_string(length);
-    std::string opt_min_size = " --size "   + std::to_string(min_width) + " " + std::to_string(min_height);
-    std::string path         = " --path "   + mPkgPath + "/img/template_image_list.txt";
+    std::string opt_length   = " --length "   + std::to_string(length);
+    std::string opt_min_size = " --size "     + std::to_string(min_width) + " " + std::to_string(min_height);
+    std::string opt_path     = " --path "     + filename;
+    std::string opt_keywords = " --keywords " + keywords;
 
-    execute_script(py_file + opt_length + opt_min_size + path + " --keywords " + keywords);
+    execute_script(py_file + opt_length + opt_min_size + opt_path + opt_keywords);
 }
 
-void PythonCaller::getBackgroundImageList(int length, int min_height, int min_width, std::string keywords)
-{
-    std::string py_file = "generate_image_list.py";
-
-    std::string opt_length = " --length " + std::to_string(length);
-    std::string opt_min_size = " --size " + std::to_string(min_width) + " " + std::to_string(min_height);
-    std::string path = " --path " + mPkgPath + "/img/background_image_list.txt";
-
-    execute_script(py_file + opt_length + opt_min_size + path + " --keywords " + keywords);
-}
-
-void PythonCaller::downloadTemplateImage(std::string filename, int nr)
+void PythonCaller::downloadImage(std::string filename, std::string list, int nr)
 {
     std::string py_file = "download_image.py";
 
-    std::string path = " --path " + filename + ".jpg";
-    std::string img_list = " --img_list " + mPkgPath + "/img/template_image_list.txt";
+    std::string opt_path   = " --path " + filename + ".jpg";
+    std::string opt_list   = " --img_list " + list;
+    std::string opt_number = " --image_nr " + std::to_string(nr);
 
-    execute_script(py_file + path + img_list + " --image_nr " + std::to_string(nr));
+    execute_script(py_file + opt_path + opt_list + opt_number);
 }
 
-void PythonCaller::downloadBackgroundImage(std::string filename, int nr)
-{
-    std::string py_file = "download_image.py";
 
-    std::string path = " --path " + filename + ".jpg";
-    std::string img_list = " --img_list " + mPkgPath + "/img/background_image_list.txt";
-
-    execute_script(py_file + path + img_list + " --image_nr " + std::to_string(nr));
-}
 
 void PythonCaller::getGroundTruthData(std::string animation, int frames, std::string path)
 {

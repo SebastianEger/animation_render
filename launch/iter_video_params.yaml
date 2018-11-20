@@ -1,5 +1,5 @@
 fps: 1
-frames: 2
+frames: 1
 render_image_width:  500
 render_image_height: 500
 sensor_width: 32.0
