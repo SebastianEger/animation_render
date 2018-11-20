@@ -150,8 +150,6 @@ private:
 
     std::string mRenderFilename;
 
-    std::string mTemplateFilename;
-
     std::string mPathVideos;
     std::string mPathTemplates;
     std::string mPathBackgrounds;
