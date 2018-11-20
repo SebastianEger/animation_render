@@ -1,4 +1,0 @@
-<launch>
-  <node pkg="animation_render" type="animation_render_node" name="animation_render" />
-  <test test-name="videostream_test" pkg="animation_render" type="videostream_test" />
-</launch>
