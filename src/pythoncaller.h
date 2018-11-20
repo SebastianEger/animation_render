@@ -45,34 +45,19 @@ public:
                      VideoOptions video_options, std::string object, std::string animation, double mp1, double mp2, double mp3);
 
     /*!
-     * \brief Creates a list of template image urls
+     * \brief Creates a list of image urls
      * \param length Length of list
      * \param min_height Minimal height of images
      * \param min_width Minimal width of images
      * \param keywords Some keywords to search for
      */
-    void getTemplateImageList(int length, int min_height, int min_width, std::string keywords);
+    void getImageList(std::string path, int length, int min_height, int min_width, std::string keywords);
 
     /*!
-     * \brief Creates a list of background image urls
-     * \param length Length of list
-     * \param min_height Minimal height of images
-     * \param min_width Minimal width of images
-     * \param keywords Some keywords to search for
-     */
-    void getBackgroundImageList(int length, int min_height, int min_width, std::string keywords);
-
-    /*!
-     * \brief Download template image from list
+     * \brief Download image from list
      * \param nr Index of image
      */
-    void downloadTemplateImage(std::string filename, int nr);
-
-    /*!
-     * \brief Donwload background image from list
-     * \param nr Index of image
-     */
-    void downloadBackgroundImage(std::string filename, int nr);
+    void downloadImage(std::string filename, std::string list, int nr);
 
     /*!
      * \brief Get the ground truth data of given animation
