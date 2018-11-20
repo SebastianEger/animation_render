@@ -30,14 +30,10 @@ public:
      */
     void start();
 
-    /*!
-     * \brief mAutostart Start tests instantly
-     */
-    bool mAutostart;
-
-private:
     bool downloadTemplateImage();
     bool downloadBackgroundImage();
+
+private:
     void initNextVideo();
 
     /*!
