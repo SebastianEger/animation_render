@@ -26,14 +26,16 @@ catkin run_tests
 ## Commands
 The node can be controlled via the /animation_render/control topic.
 Commands:
-- CreateBackgroundList
-- CreateTemplateList
-- CreateLists
-- DownloadBackgrounds
-- DownloadTemplates
-- DownloadImages
-- RenderVideos
-- StartTest
+- CreateBackgroundList: Create background list
+- CreateTemplateList: Create template list
+- CreateLists: Create background and template list
+- DownloadBackgrounds: Download background images of list
+- DownloadTemplates: Download template images of list
+- DownloadImages: Download all background and template images
+- RenderVideos: Renders all videos
+- StartTest: Start test series
+- ExportGroundTruth: Exports ground truth data to ~/ground_truth
+- SetParameters: Manual set the model paremeters
 
 ## Acknowledgments
 
