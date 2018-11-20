@@ -4,14 +4,12 @@
 AnimationRender::AnimationRender()
 {
     mpNodeHandle = new ros::NodeHandle("~");
-    mTemplateFilename = ros::package::getPath("animation_render") +  "/img/template_image.jpg";
 }
 
 AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     mpNodeHandle(nH)
 {
     mGlobalNodeHandle = ros::NodeHandle();
-    mTemplateFilename = ros::package::getPath("animation_render") +  "/img/template_image.jpg";
 
     mpPyCaller           = new PythonCaller(&mGlobalNodeHandle);
     mpVideoStream        = new VideoStream(mGlobalNodeHandle);
@@ -33,12 +31,11 @@ AnimationRender::AnimationRender(ros::NodeHandle *nH) :
     // Get parameters
     getTestParameters();
 
-    std::string videoFolderPath      = mPathVideos    + "/" + mAnimation;
+    std::string videoFolderPath = mPathVideos    + "/" + mAnimation;
 
     boost::filesystem::path videoDir(videoFolderPath.c_str());
     boost::filesystem::path templateDir(mTemplateFolder.c_str());
     boost::filesystem::path backgroundDir(mBackgroundFolder.c_str());
-
 
     boost::filesystem::create_directories(videoDir);
     boost::filesystem::create_directories(templateDir);
@@ -126,7 +123,7 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
 
         while(true) {
             std::string video_name = mPathVideos + "/" + mAnimation + "/" + mObject + "/video_" + std::to_string(mCurrentTemplateImgID) + "_" + std::to_string(mCurrentBackgroundImgID);
-            std::string template_name =   mTemplateFolder + "/template_" + std::to_string(mCurrentTemplateImgID);
+            std::string template_name =   mTemplateFolder   + "/template_" + std::to_string(mCurrentTemplateImgID);
             std::string background_name = mBackgroundFolder + "/background_" + std::to_string(mCurrentBackgroundImgID);
 
             if(mUseWhiteBackground) background_name = "White";
