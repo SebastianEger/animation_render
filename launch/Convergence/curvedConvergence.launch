@@ -10,7 +10,7 @@
         <!-- Length, Height -->
         <param name="model_parameter_1" value="0.2"/>
         <!-- Radius, Width -->
-        <param name="model_parameter_2" value="0.14"/>
+        <param name="model_parameter_2" value="0.1"/>
         <!-- Faces -->
         <param name="model_parameter_3" value="64"/>
 
@@ -27,7 +27,7 @@
         <rosparam command="load" file="$(find animation_render)/launch/iter_video_params.yaml" />
         <rosparam command="load" file="$(find animation_render)/launch/image_params.yaml" />
 
-        <param name="template_resize" value="200"/>
+        <param name="template_resize"      value="200"/>
         <param name="threshold_acceptance" value="0"/>
         <param name="threshold_gradient"   value="0"/>
 
