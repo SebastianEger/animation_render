@@ -23,13 +23,20 @@ catkin build
 In catkin workspace:
 catkin run_tests
 
-### Break down into end to end tests
-
-PointOfInterest Tests:
-
-Object Tests:
-
-Model Tests:
+## Commands
+The node can be controlled via the /animation_render/control topic.
+Commands:
+- CreateBackgroundList: Create background list
+- CreateTemplateList: Create template list
+- CreateLists: Create background and template list
+- DownloadBackgrounds: Download background images of list
+- DownloadTemplates: Download template images of list
+- DownloadImages: Download all background and template images
+- RenderVideos: Renders all videos
+- StartTest: Start test series
+- ExportGroundTruth: Exports ground truth data to ~/ground_truth
+- SetParameters: Manual set the model paremeters
+- EvaluateTemplates: Evaluate all templates for their gradient
 
 ## Acknowledgments
 
