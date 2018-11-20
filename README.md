@@ -36,6 +36,7 @@ Commands:
 - StartTest: Start test series
 - ExportGroundTruth: Exports ground truth data to ~/ground_truth
 - SetParameters: Manual set the model paremeters
+- EvaluateTemplates: Evaluate all templates for their gradient
 
 ## Acknowledgments
 
