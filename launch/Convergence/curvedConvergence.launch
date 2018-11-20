@@ -24,8 +24,10 @@
         <param name="template_keywords"       value="abstract"/>
         <param name="background_keywords"     value="city tree"/>
 
-        <rosparam command="load" file="$(find animation_render)/launch/iter_video_params.yaml" />
+        <rosparam command="load" file="$(find animation_render)/launch/video_params.yaml" />
         <rosparam command="load" file="$(find animation_render)/launch/image_params.yaml" />
+
+        <param name="frames" value="1"/>
 
         <param name="template_resize"      value="200"/>
         <param name="threshold_acceptance" value="0"/>

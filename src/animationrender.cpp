@@ -174,15 +174,17 @@ void AnimationRender::controlCallback(const std_msgs::String::ConstPtr &msg)
     if(msg->data == "SetParameters") {
         setTemplateModelParameters();
     }
-    if(msg->data == "ShowTemplate") {
-        std::string path =  ros::package::getPath("animation_render") +  "/img/template_image.jpg";
-        TemplateEvaluation::showImage(path);
-    }
-    if(msg->data == "EvaluateTemplate") {
-        std::string path =  ros::package::getPath("animation_render") +  "/img/template_image.jpg";
-        double acc_x, acc_y;
-        mpTemplateEvaluation->evaluate(path, acc_x, acc_y);
-        ROS_INFO_STREAM("Acceptance: x: " << std::to_string(acc_x) << " y: " << std::to_string(acc_y));
+    if(msg->data == "EvaluateTemplates") {
+        mCurrentTemplateImgID = 0;
+        while(true) {
+            if(mCurrentTemplateImgID == mTemplateListLength) break;
+            std::string path =  mTemplateFolder + "/template_" + std::to_string(mCurrentTemplateImgID) + ".jpg";
+            double acc_x, acc_y;
+            mpTemplateEvaluation->evaluate(path, acc_x, acc_y);
+            ROS_INFO_STREAM("ID: " << mCurrentTemplateImgID << " Acceptance: x: " << std::to_string(acc_x) << " y: " << std::to_string(acc_y));
+            ++mCurrentTemplateImgID;
+        }
+
     }
     if(msg->data == "ExportGroundTruth") {
         mpPyCaller->getGroundTruthData(mAnimation, mVideoOptions.frames,  "~/ground_truth");

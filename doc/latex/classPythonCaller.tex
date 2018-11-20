@@ -1,0 +1,162 @@
+\hypertarget{classPythonCaller}{}\section{Python\+Caller Class Reference}
+\label{classPythonCaller}\index{Python\+Caller@{Python\+Caller}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Python\+Caller} (ros\+::\+Node\+Handle $\ast$nh)\hypertarget{classPythonCaller_a17b5967b8cb382fa420dee33870a186a}{}\label{classPythonCaller_a17b5967b8cb382fa420dee33870a186a}
+
+\item 
+void \hyperlink{classPythonCaller_a2f996721a3cddabbfb9181d826fc9335}{render\+Video} (std\+::string video\+\_\+name, std\+::string template\+\_\+name, std\+::string background\+\_\+name, \hyperlink{structVideoOptions}{Video\+Options} video\+\_\+options, std\+::string object, std\+::string animation, double mp1, double mp2, double mp3)
+\begin{DoxyCompactList}\small\item\em Render video. \end{DoxyCompactList}\item 
+void \hyperlink{classPythonCaller_a2edcddb9119570ee95b2f4fb6e18c58c}{get\+Image\+List} (std\+::string path, int length, int min\+\_\+height, int min\+\_\+width, std\+::string keywords)
+\begin{DoxyCompactList}\small\item\em Creates a list of image urls. \end{DoxyCompactList}\item 
+void \hyperlink{classPythonCaller_a6217d7fc3432b3464c274b3fe2c5c539}{download\+Image} (std\+::string filename, std\+::string list, int nr)
+\begin{DoxyCompactList}\small\item\em Download image from list. \end{DoxyCompactList}\item 
+void \hyperlink{classPythonCaller_a4a7706b979cfe9aa45f1dcbc80d9a942}{get\+Ground\+Truth\+Data} (std\+::string animation, int frames, std\+::string path)
+\begin{DoxyCompactList}\small\item\em Get the ground truth data of given animation. \end{DoxyCompactList}\item 
+void \hyperlink{classPythonCaller_a690a2ad68abc1dc354eb74b9c58e65e7}{get\+Init\+Pose} (std\+::string animation, \hyperlink{structPose}{Pose} \&init\+Pose)
+\begin{DoxyCompactList}\small\item\em Get init pose of animation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Python\+Caller@{Python\+Caller}!download\+Image@{download\+Image}}
+\index{download\+Image@{download\+Image}!Python\+Caller@{Python\+Caller}}
+\subsubsection[{\texorpdfstring{download\+Image(std\+::string filename, std\+::string list, int nr)}{downloadImage(std::string filename, std::string list, int nr)}}]{\setlength{\rightskip}{0pt plus 5cm}void Python\+Caller\+::download\+Image (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{filename, }
+\item[{std\+::string}]{list, }
+\item[{int}]{nr}
+\end{DoxyParamCaption}
+)}\hypertarget{classPythonCaller_a6217d7fc3432b3464c274b3fe2c5c539}{}\label{classPythonCaller_a6217d7fc3432b3464c274b3fe2c5c539}
+
+
+Download image from list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nr} & Index of image \\
+\hline
+\end{DoxyParams}
+\index{Python\+Caller@{Python\+Caller}!get\+Ground\+Truth\+Data@{get\+Ground\+Truth\+Data}}
+\index{get\+Ground\+Truth\+Data@{get\+Ground\+Truth\+Data}!Python\+Caller@{Python\+Caller}}
+\subsubsection[{\texorpdfstring{get\+Ground\+Truth\+Data(std\+::string animation, int frames, std\+::string path)}{getGroundTruthData(std::string animation, int frames, std::string path)}}]{\setlength{\rightskip}{0pt plus 5cm}void Python\+Caller\+::get\+Ground\+Truth\+Data (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{animation, }
+\item[{int}]{frames, }
+\item[{std\+::string}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{classPythonCaller_a4a7706b979cfe9aa45f1dcbc80d9a942}{}\label{classPythonCaller_a4a7706b979cfe9aa45f1dcbc80d9a942}
+
+
+Get the ground truth data of given animation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em animation} & Name of animation \\
+\hline
+{\em frames} & Number of frames \\
+\hline
+{\em path} & output path \\
+\hline
+\end{DoxyParams}
+\index{Python\+Caller@{Python\+Caller}!get\+Image\+List@{get\+Image\+List}}
+\index{get\+Image\+List@{get\+Image\+List}!Python\+Caller@{Python\+Caller}}
+\subsubsection[{\texorpdfstring{get\+Image\+List(std\+::string path, int length, int min\+\_\+height, int min\+\_\+width, std\+::string keywords)}{getImageList(std::string path, int length, int min_height, int min_width, std::string keywords)}}]{\setlength{\rightskip}{0pt plus 5cm}void Python\+Caller\+::get\+Image\+List (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{path, }
+\item[{int}]{length, }
+\item[{int}]{min\+\_\+height, }
+\item[{int}]{min\+\_\+width, }
+\item[{std\+::string}]{keywords}
+\end{DoxyParamCaption}
+)}\hypertarget{classPythonCaller_a2edcddb9119570ee95b2f4fb6e18c58c}{}\label{classPythonCaller_a2edcddb9119570ee95b2f4fb6e18c58c}
+
+
+Creates a list of image urls. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em length} & Length of list \\
+\hline
+{\em min\+\_\+height} & Minimal height of images \\
+\hline
+{\em min\+\_\+width} & Minimal width of images \\
+\hline
+{\em keywords} & Some keywords to search for \\
+\hline
+\end{DoxyParams}
+\index{Python\+Caller@{Python\+Caller}!get\+Init\+Pose@{get\+Init\+Pose}}
+\index{get\+Init\+Pose@{get\+Init\+Pose}!Python\+Caller@{Python\+Caller}}
+\subsubsection[{\texorpdfstring{get\+Init\+Pose(std\+::string animation, Pose \&init\+Pose)}{getInitPose(std::string animation, Pose &initPose)}}]{\setlength{\rightskip}{0pt plus 5cm}void Python\+Caller\+::get\+Init\+Pose (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{animation, }
+\item[{{\bf Pose} \&}]{init\+Pose}
+\end{DoxyParamCaption}
+)}\hypertarget{classPythonCaller_a690a2ad68abc1dc354eb74b9c58e65e7}{}\label{classPythonCaller_a690a2ad68abc1dc354eb74b9c58e65e7}
+
+
+Get init pose of animation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em animation} & Name of animation \\
+\hline
+{\em x} & x position \\
+\hline
+{\em y} & y position \\
+\hline
+{\em z} & z position \\
+\hline
+{\em ax} & angle x \\
+\hline
+{\em ay} & angle y \\
+\hline
+{\em az} & angle z \\
+\hline
+\end{DoxyParams}
+\index{Python\+Caller@{Python\+Caller}!render\+Video@{render\+Video}}
+\index{render\+Video@{render\+Video}!Python\+Caller@{Python\+Caller}}
+\subsubsection[{\texorpdfstring{render\+Video(std\+::string video\+\_\+name, std\+::string template\+\_\+name, std\+::string background\+\_\+name, Video\+Options video\+\_\+options, std\+::string object, std\+::string animation, double mp1, double mp2, double mp3)}{renderVideo(std::string video_name, std::string template_name, std::string background_name, VideoOptions video_options, std::string object, std::string animation, double mp1, double mp2, double mp3)}}]{\setlength{\rightskip}{0pt plus 5cm}void Python\+Caller\+::render\+Video (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{video\+\_\+name, }
+\item[{std\+::string}]{template\+\_\+name, }
+\item[{std\+::string}]{background\+\_\+name, }
+\item[{{\bf Video\+Options}}]{video\+\_\+options, }
+\item[{std\+::string}]{object, }
+\item[{std\+::string}]{animation, }
+\item[{double}]{mp1, }
+\item[{double}]{mp2, }
+\item[{double}]{mp3}
+\end{DoxyParamCaption}
+)}\hypertarget{classPythonCaller_a2f996721a3cddabbfb9181d826fc9335}{}\label{classPythonCaller_a2f996721a3cddabbfb9181d826fc9335}
+
+
+Render video. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em frames} & Number frames \\
+\hline
+{\em fps} & Frames per second \\
+\hline
+{\em object} & Name of object\+: Plane, Cylinder \\
+\hline
+{\em animation} & Name of animation \\
+\hline
+{\em res\+\_\+x} & Resolution x \\
+\hline
+{\em res\+\_\+y} & Resolution y \\
+\hline
+{\em mp1} & Model parameter 1 \\
+\hline
+{\em mp2} & Model parameter 2 \\
+\hline
+{\em mp3} & Model parameter 3 \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/sebastian/catkin\+\_\+ws/src/animation\+\_\+render/src/pythoncaller.\+h\item 
+/home/sebastian/catkin\+\_\+ws/src/animation\+\_\+render/src/pythoncaller.\+cpp\end{DoxyCompactItemize}
