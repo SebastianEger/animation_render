@@ -29,12 +29,21 @@ class BlenderObject:
             self.tex.image = bpy.data.images.load(image)
 
     def set_location(self, loc):
+        """!@brief Set location of the object
+            @param loc Location
+        """
         self.obj.location = loc
 
     def set_rotation(self, rot):
+        """!@brief Set rotation of the object
+            @param rot Rotation
+        """
         self.obj.rotation_euler = rot
 
     def set_image(self, image):
+        """!@brief Set template image of the object
+            @param image Template image
+        """
         if not os.path.exists(".tmp"):
             os.makedirs(".tmp")
 
@@ -42,6 +51,10 @@ class BlenderObject:
         self.tex.image = bpy.data.images.load(".tmp/template.png")
 
     def keyframe_insert(self, keyframe_type, frame):
+        """!@brief Insert key frame
+            @param keyframe_type 'rotation_euler', 'location'
+            @param frame Frame number
+        """
         self.obj.keyframe_insert(data_path=keyframe_type, frame=frame)
 
     def _create_obj(self):

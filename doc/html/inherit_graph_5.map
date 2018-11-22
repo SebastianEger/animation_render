@@ -1,6 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classframework_1_1objects_1_1BlenderObject.html" title="framework.objects.Blender\lObject" alt="" coords="5,49,183,90"/>
-<area shape="rect" id="node2" href="$classframework_1_1objects_1_1Curved.html" title="framework.objects.Curved" alt="" coords="234,5,409,32"/>
-<area shape="rect" id="node3" href="$classframework_1_1objects_1_1Cylinder.html" title="framework.objects.Cylinder" alt="" coords="231,56,412,83"/>
-<area shape="rect" id="node4" href="$classframework_1_1objects_1_1Plane.html" title="framework.objects.Plane" alt="" coords="238,107,405,133"/>
+<area shape="rect" id="node1" href="$classPythonCaller.html" title="PythonCaller" alt="" coords="5,5,103,32"/>
 </map>
