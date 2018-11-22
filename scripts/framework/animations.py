@@ -10,6 +10,12 @@ class Animation:
     interpolation = "QUAD"
 
     def __init__(self, bdr_handler, blender_object, frames):
+        """!@brief Creates new Animation.
+        Animation contains function for keyframe creation and initial pose.
+            @param bdr_handler BlenderHandler
+            @param blender_object BlenderObject
+            @param frames Number of frames the animation can use
+        """
         self.obj = blender_object
         bdr_handler.scene.render.image_settings.file_format = 'AVI_JPEG'
         self._add_keyframes(bdr_handler.scene, blender_object, frames)
@@ -22,12 +28,12 @@ class Animation:
 
     @staticmethod
     def get_start_position():
-        """ Returns the init position """
+        """!@brief Returns the init position """
         return (0, 0, 0)
 
     @staticmethod
     def get_start_rotation():
-        """ Returns the init rotation """
+        """!@brief Returns the init rotation """
         return (0, 0, 0)
 
 
