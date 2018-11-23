@@ -74,9 +74,3 @@ Exports ground truth data to ~/ground_truth
 EvaluateTemplates
 ```
 Evaluate all templates for their gradient
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
