@@ -25,7 +25,10 @@ The build process can take awhile.
 The blender python module is installed at **/usr/include/python3.5/site-packages**.
 
 ## Commands
-The node can be controlled via the **/animation_render/control** topic.
+The node can be controlled via the **/animation_render/control** topic, e.g:
+```
+rostopic pub /animation_render/control std_msgs/String CreateBackgroundList
+```
 Commands:
 ```
 CreateBackgroundList
