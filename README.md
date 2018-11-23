@@ -25,19 +25,48 @@ The build process can take awhile.
 The blender python module is installed at **/usr/include/python3.5/site-packages**.
 
 ## Commands
-The node can be controlled via the /animation_render/control topic.
+The node can be controlled via the **/animation_render/control** topic.
 Commands:
-- CreateBackgroundList: Create background list
-- CreateTemplateList: Create template list
-- CreateLists: Create background and template list
-- DownloadBackgrounds: Download background images of list
-- DownloadTemplates: Download template images of list
-- DownloadImages: Download all background and template images
-- RenderVideos: Renders all videos
-- StartTest: Start test series
-- ExportGroundTruth: Exports ground truth data to ~/ground_truth
-- SetParameters: Manual set the model paremeters
-- EvaluateTemplates: Evaluate all templates for their gradient
+```
+CreateBackgroundList
+```
+Creates list of image URLs from FLickr with background keywords.
+```
+CreateTemplateList
+```
+Creates list of image URLs from FLickr with template keywords.
+```
+CreateLists
+```
+Create background and template list.
+```
+DownloadBackgrounds
+```
+Download all images stored as URL in the background list.
+```
+DownloadTemplates
+```
+Download all images stored as URL in the template list.
+```
+DownloadImages
+```
+Download all background and template images.
+```
+RenderVideos
+```
+Renders all videos with given template and background images.
+```
+StartTest
+```
+Start test series. Videos have to be rendered first.
+```
+ExportGroundTruth
+```
+Exports ground truth data to ~/ground_truth
+```
+EvaluateTemplates
+```
+Evaluate all templates for their gradient
 
 ## Acknowledgments
 
