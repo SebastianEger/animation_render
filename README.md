@@ -22,7 +22,11 @@ catkin build
 ```
 All dependencies are build automatically.
 The build process can take awhile.
-The blender python module is installed at **/usr/include/python3.5/site-packages**.
+The blender python module (2.78c) is installed at **/usr/include/python3.5/site-packages**.
+Installed Python dependencies:
+- pillow
+- flickrapi
+- pyyaml
 
 ## Commands
 The node can be controlled via the **/animation_render/control** topic, e.g:
