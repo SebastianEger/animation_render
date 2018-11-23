@@ -25,7 +25,7 @@ The build process can take awhile.
 The blender python module (2.78c) is installed at **/usr/include/python3.5/site-packages**.
 Installed Python dependencies:
 - pillow
-- flickrapi
+- flickrapi (https://stuvel.eu/flickrapi)
 - pyyaml
 
 ## Commands
