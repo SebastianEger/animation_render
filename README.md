@@ -15,7 +15,7 @@ git clone https://gitlab.lrz.de/ga25vug/animation_render.git
 - Ubuntu 16.04
 - ROS Kinetic: http://wiki.ros.org/kinetic
 - Python 3.5 (comes with Ubuntu)
-- OpenCV: https://opencv.org
+- OpenCV: https://opencv.org (comes with ROS)
 
 ### Installing
 
