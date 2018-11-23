@@ -1,7 +1,7 @@
 # Animation Render
 
 Evaluation framework for the [mdltracker](https://gitlab.lrz.de/ga25vug/mdltracker) project.
-Uses the blender python module to render textured objects.
+Uses the blender python module to render animated textured objects.
 Templates can be obtained by using the flickr API.
 
 ## Getting Started
