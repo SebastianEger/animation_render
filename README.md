@@ -11,17 +11,18 @@ Templates can be obtained by using the flickr API.
 
 - Ubuntu 16.04
 - ROS Kinetic: http://wiki.ros.org/kinetic
+- Python 3.5 (comes with Ubuntu)
 - OpenCV: https://opencv.org
 
 ### Installing
 
 In catkin workspace:
+```
 catkin build
-
-## Running the tests
-
-In catkin workspace:
-catkin run_tests
+```
+All dependencies are build automatically.
+The build process can take awhile.
+The blender python module is installed at **/usr/include/python3.5/site-packages**.
 
 ## Commands
 The node can be controlled via the /animation_render/control topic.
