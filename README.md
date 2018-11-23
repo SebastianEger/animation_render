@@ -5,7 +5,10 @@ Uses the blender python module to render animated textured objects.
 Templates can be obtained by using the flickr API.
 
 ## Getting Started
-
+Get the source:
+```
+git clone https://gitlab.lrz.de/ga25vug/animation_render.git
+```
 
 ### Prerequisites
 
