@@ -1,0 +1,40 @@
+<launch>
+    <node name="animation_render" pkg="animation_render" type="animation_render_node" output="screen">
+        <param name="control_topic" value="/mdltracker/control"/>
+
+        <param name="video_folder"      value="/home/sebastian/animation_render/videos"/>
+        <param name="template_folder"   value="/home/sebastian/animation_render/templates"/>
+        <param name="background_folder" value="/home/sebastian/animation_render/backgrounds"/>
+
+        <param name="object" value="Cylinder"/>
+        <!-- Length, Height -->
+        <param name="model_parameter_1" value="0.2"/>
+        <!-- Radius, Width -->
+        <param name="model_parameter_2" value="0.1"/>
+        <!-- Faces -->
+        <param name="model_parameter_3" value="64"/>
+
+        <!--
+        RotationX RotationY RotationZ
+        TranslationXY
+        -->
+        <param name="animation" value="RotationX2"/>
+
+        <param name="init_R_range" value="0"/>
+        <param name="init_T_range" value="0"/>
+
+        <param name="template_list_length"    value="1"/>
+        <param name="background_list_length"  value="1"/>
+        <param name="template_keywords"       value="city tree"/>
+        <param name="background_keywords"     value="city tree"/>
+
+        <param name="white_background"        value="true"/>
+
+        <rosparam command="load" file="$(find animation_render)/launch/video_params.yaml" />
+        <rosparam command="load" file="$(find animation_render)/launch/image_params.yaml" />
+
+        <param name="template_resize"      value="90"/>
+        <param name="threshold_acceptance" value="0"/>
+        <param name="threshold_gradient"   value="10"/>
+    </node>
+</launch>

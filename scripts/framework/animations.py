@@ -230,26 +230,26 @@ class RotationX(Animation):
 
 class RotationX2(Animation):
 
-    interpolation = 'QUAD'
+    interpolation = 'LINEAR'
 
     def __init__(self, bdr_handler, blender_object, frames):
         Animation.__init__(self, bdr_handler, blender_object, frames)
 
     def _add_keyframes(self, scene, blender_object, frames):
         blender_object.set_rotation( (0, 0, 0) )
-        blender_object.set_location( (0, 0, 1.5) )
+        blender_object.set_location( (0, 0, 0.5) )
         blender_object.keyframe_insert("rotation_euler", 1)
         blender_object.keyframe_insert("location", 1)
 
         blender_object.set_rotation( (math.pi/2, 0, 0) )
-        blender_object.set_location( (0, 0, 1.5) )
+        blender_object.set_location( (0, 0, 0.5) )
         blender_object.keyframe_insert("rotation_euler", int(frames))
         blender_object.keyframe_insert("location", int(frames))
 
 
     @staticmethod
     def get_start_position():
-        return 0, 0, 1.5
+        return 0, 0, 0.5
 
     @staticmethod
     def get_start_rotation():
