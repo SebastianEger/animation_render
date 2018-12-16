@@ -14,12 +14,12 @@
         <!-- Faces -->
         <param name="model_parameter_3" value="64"/>
 
-        <param name="animation" value="RandomMovement"/>
+        <param name="animation" value="RandomMovement2"/>
 
         <param name="init_R_range" value="0"/>
         <param name="init_T_range" value="0"/>
 
-        <param name="template_list_length"    value="50"/>
+        <param name="template_list_length"    value="1"/>
         <param name="background_list_length"  value="1"/>
 
         <param name="template_keywords"       value="abstract"/>

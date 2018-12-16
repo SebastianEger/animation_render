@@ -148,6 +148,49 @@ class RandomMovement(Animation):
         return 0, 0, 0
 
 
+class RandomMovement2(Animation):
+
+    interpolation = 'LINEAR'
+
+    def __init__(self, bdr_handler, blender_object, frames):
+        Animation.__init__(self, bdr_handler, blender_object, frames)
+
+    def _add_keyframes(self, scene, blender_object, frames):
+        blender_object.set_rotation( (0, 0, 0) )
+        blender_object.set_location( (0, 0, 1) )
+        blender_object.keyframe_insert("rotation_euler", 1)
+        blender_object.keyframe_insert("location", 1)
+
+        blender_object.set_rotation( (0, 0, 0) )
+        blender_object.set_location( (0, 0, 1) )
+        blender_object.keyframe_insert("rotation_euler", int(frames))
+        blender_object.keyframe_insert("location", int(frames))
+
+        # Noise
+        action = blender_object.obj.animation_data.action
+
+        for fcu in action.fcurves:
+            if fcu.data_path == "location":  # and fcu.array_index == 0:
+                mod = fcu.modifiers.new("NOISE")
+                mod.strength = 0.1
+                mod.scale = 20
+                # mod.phase = random.uniform(0, 100)
+                mod.phase = fcu.array_index*50
+                mod.use_restricted_range = True
+                mod.frame_start = 5
+                mod.frame_end = int(frames)
+                mod.blend_in = 100
+
+
+    @staticmethod
+    def get_start_position():
+        return 0, 0, 1
+
+    @staticmethod
+    def get_start_rotation():
+        return 0, 0, 0
+
+
 class RandomMixed(Animation):
 
     interpolation = 'LINEAR'
@@ -208,12 +251,15 @@ class RotationX(Animation):
         Animation.__init__(self, bdr_handler, blender_object, frames)
 
     def _add_keyframes(self, scene, blender_object, frames):
-        blender_object.set_rotation( (-math.pi/2+0.1, 0, 0) )
+        blender_object.set_rotation( (0, 0, 0) )
         blender_object.set_location( (0, 0, 1.5) )
         blender_object.keyframe_insert("rotation_euler", 1)
         blender_object.keyframe_insert("location", 1)
 
-        blender_object.set_rotation( (math.pi/2-0.1, 0, 0) )
+        blender_object.keyframe_insert("rotation_euler", 10)
+        blender_object.keyframe_insert("location", 10)
+
+        blender_object.set_rotation( (math.pi*4, 0, 0) )
         blender_object.set_location( (0, 0, 1.5) )
         blender_object.keyframe_insert("rotation_euler", int(frames))
         blender_object.keyframe_insert("location", int(frames))
@@ -225,7 +271,7 @@ class RotationX(Animation):
 
     @staticmethod
     def get_start_rotation():
-        return -math.pi/2+0.1, 0, 0
+        return 0, 0, 0
 
 
 class RotationX2(Animation):

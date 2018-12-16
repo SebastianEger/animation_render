@@ -3,7 +3,7 @@
         <param name="control_topic" value="/mdltracker/control"/>
 
         <param name="video_folder"      value="/home/sebastian/animation_render/videos"/>
-        <param name="template_folder"   value="/home/sebastian/animation_render/templates"/>
+        <param name="template_folder"   value="/home/sebastian/animation_render/kandinsky_template"/>
         <param name="background_folder" value="/home/sebastian/animation_render/backgrounds"/>
 
         <param name="object" value="Cylinder"/>
@@ -23,7 +23,7 @@
         <param name="init_R_range" value="0"/>
         <param name="init_T_range" value="0"/>
 
-        <param name="template_list_length"    value="50"/>
+        <param name="template_list_length"    value="1"/>
         <param name="background_list_length"  value="1"/>
         <param name="template_keywords"       value="city tree"/>
         <param name="background_keywords"     value="city tree"/>
@@ -31,7 +31,9 @@
         <rosparam command="load" file="$(find animation_render)/launch/video_params.yaml" />
         <rosparam command="load" file="$(find animation_render)/launch/image_params.yaml" />
 
-        <param name="template_resize"      value="90"/>
+        <param name="frames" value="500"/>
+
+        <param name="template_resize"      value="150"/>
         <param name="threshold_acceptance" value="0"/>
         <param name="threshold_gradient"   value="10"/>
     </node>
